@@ -1,1 +1,1 @@
-export * from './useMouseEnter';
+export * from './use-outside-click';

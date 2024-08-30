@@ -1,12 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-import { MouseEnterContext } from '@/contexts';
 import { cn } from '@/lib/utils';
-import { useMouseEnter } from '@/hooks';
 
-type CardItemProps = ComponentProps<{
+export type CardItemProps = ComponentProps<{
   as?: React.ElementType;
   translateX?: Numberish;
   translateY?: Numberish;
@@ -16,6 +14,16 @@ type CardItemProps = ComponentProps<{
   rotateZ?: Numberish;
   [key: string]: any;
 }>;
+
+export const MouseEnterContext = createContext<StateContextType>([false, () => {}]);
+
+export const useMouseEnter = () => {
+  const context = useContext(MouseEnterContext);
+  if (!context) {
+    throw new Error('useMouseEnter must be used within a MouseEnterProvider');
+  }
+  return context;
+};
 
 export const CardContainer = ({ children, className, containerClassName }: ComponentProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -63,13 +71,11 @@ export const CardContainer = ({ children, className, containerClassName }: Compo
   );
 };
 
-export const CardBody = ({ children, className }: ComponentProps) => {
-  return (
-    <div className={cn('h-96 w-96 [transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d]', className)}>
-      {children}
-    </div>
-  );
-};
+export const CardBody = ({ children, className }: ComponentProps) => (
+  <div className={cn('h-96 w-96 [transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d]', className)}>
+    {children}
+  </div>
+);
 
 export const CardItem = ({
   as: Tag = 'div',
@@ -86,7 +92,7 @@ export const CardItem = ({
   const ref = useRef<HTMLDivElement>(null);
   const [isMouseEntered] = useMouseEnter();
 
-  useEffect(() => {
+  const handleAnimations = useCallback(() => {
     if (!ref.current) return;
     if (isMouseEntered) {
       ref.current.style.transform = `translateX(${translateX}px) translateY(${translateY}px) translateZ(${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg)`;
@@ -94,6 +100,10 @@ export const CardItem = ({
       ref.current.style.transform = `translateX(0px) translateY(0px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg)`;
     }
   }, [isMouseEntered, rotateX, rotateY, rotateZ, translateX, translateY, translateZ]);
+
+  useEffect(() => {
+    handleAnimations();
+  }, [handleAnimations]);
 
   return (
     <Tag ref={ref} className={cn('w-fit transition duration-200 ease-linear', className)} {...rest}>
