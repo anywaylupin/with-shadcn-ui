@@ -2,7 +2,7 @@
 
 import { cn } from '@/lib/utils';
 
-export type AuroraBackgroundProps = ComponentProps<React.HTMLProps<HTMLDivElement> & { showRadialGradient?: boolean }>;
+export type AuroraBackgroundProps = PropsWithClass<React.HTMLProps<HTMLDivElement> & { showRadialGradient?: boolean }>;
 
 export const AuroraBackground = ({
   className,

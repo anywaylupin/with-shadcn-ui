@@ -10,7 +10,7 @@ import { useOutsideClick } from '@/hooks';
 
 type Card = { src: string; title: string; category: string; content: React.ReactNode };
 
-type CarouselProps = ComponentProps<{ items: JSX.Element[]; initialScroll?: number }>;
+export type CarouselProps = PropsWithClass<{ items: JSX.Element[]; initialScroll?: number }>;
 
 export const CarouselContext = createContext<{ currentIndex: number; onCardClose: (index: number) => void }>({
   currentIndex: 0,

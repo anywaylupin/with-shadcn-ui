@@ -9,7 +9,7 @@ import { useOutsideClick } from '@/hooks';
 
 export const ModalContext = createContext<StateContextType>([false, () => {}]);
 
-export const ModalProvider = ({ children }: ComponentProps) => {
+export const ModalProvider = ({ children }: PropsWithClass) => {
   const [open, setOpen] = useState(false);
 
   return <ModalContext.Provider value={[open, setOpen]}>{children}</ModalContext.Provider>;
@@ -23,9 +23,9 @@ export const useModal = () => {
   return context;
 };
 
-export const Modal = ({ children }: ComponentProps) => <ModalProvider>{children}</ModalProvider>;
+export const Modal = ({ children }: PropsWithClass) => <ModalProvider>{children}</ModalProvider>;
 
-export const ModalTrigger = ({ children, className }: ComponentProps) => {
+export const ModalTrigger = ({ children, className }: PropsWithClass) => {
   const [_, setOpen] = useModal();
 
   return (
@@ -38,7 +38,7 @@ export const ModalTrigger = ({ children, className }: ComponentProps) => {
   );
 };
 
-export const ModalBody = ({ children, className }: ComponentProps) => {
+export const ModalBody = ({ children, className }: PropsWithClass) => {
   const [open, setOpen] = useModal();
 
   useEffect(() => {
@@ -83,15 +83,15 @@ export const ModalBody = ({ children, className }: ComponentProps) => {
   );
 };
 
-export const ModalContent = ({ children, className }: ComponentProps) => (
+export const ModalContent = ({ children, className }: PropsWithClass) => (
   <div className={cn('flex flex-1 flex-col p-8 md:p-10', className)}>{children}</div>
 );
 
-export const ModalFooter = ({ children, className }: ComponentProps) => (
+export const ModalFooter = ({ children, className }: PropsWithClass) => (
   <div className={cn('flex justify-end bg-gray-100 p-4 dark:bg-neutral-900', className)}>{children}</div>
 );
 
-const Overlay = ({ className }: ComponentProps) => (
+const Overlay = ({ className }: PropsWithClass) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1, backdropFilter: 'blur(10px)' }}

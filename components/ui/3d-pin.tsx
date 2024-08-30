@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 
-type PinContainerProps = ComponentProps<{ title?: string; href?: string }>;
+export type PinContainerProps = PropsWithClass<{ title?: string; href?: string }>;
 
 export const PinContainer = ({ children, title, href, className, containerClassName }: PinContainerProps) => {
   const [transform, setTransform] = useState('translate(-50%,-50%) rotateX(0deg)');

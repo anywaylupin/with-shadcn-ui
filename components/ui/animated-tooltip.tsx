@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from
 import Image from 'next/image';
 import { useState } from 'react';
 
-type AnimatedTooltipProps = ComponentProps<{
+export type AnimatedTooltipProps = PropsWithClass<{
   items: { id: number; name: string; designation: string; image: string }[];
 }>;
 
