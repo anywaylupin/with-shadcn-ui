@@ -8,16 +8,16 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 import { cn } from '@/lib/utils';
 import { useOutsideClick } from '@/hooks';
 
-type Card = { src: string; title: string; category: string; content: React.ReactNode };
+export type AppleCardType = { src: string; title: string; category: string; content: React.ReactNode };
 
-export type CarouselProps = PropsWithClass<{ items: JSX.Element[]; initialScroll?: number }>;
+export type AppleCarouselProps = PropsWithClass<{ items: JSX.Element[]; initialScroll?: number }>;
 
-export const CarouselContext = createContext<{ currentIndex: number; onCardClose: (index: number) => void }>({
+export const AppleCarouselContext = createContext<{ currentIndex: number; onCardClose: (index: number) => void }>({
   currentIndex: 0,
   onCardClose: () => {}
 });
 
-export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
+export const AppleCarousel = ({ items, initialScroll = 0 }: AppleCarouselProps) => {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -66,7 +66,7 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
   const isMobile = () => window && window.innerWidth < 768;
 
   return (
-    <CarouselContext.Provider value={{ onCardClose: handleCardClose, currentIndex }}>
+    <AppleCarouselContext.Provider value={{ onCardClose: handleCardClose, currentIndex }}>
       <div className="relative w-full">
         <div
           className="flex w-full overflow-x-scroll overscroll-x-auto scroll-smooth py-10 [scrollbar-width:none] md:py-20"
@@ -114,14 +114,22 @@ export const Carousel = ({ items, initialScroll = 0 }: CarouselProps) => {
           </button>
         </div>
       </div>
-    </CarouselContext.Provider>
+    </AppleCarouselContext.Provider>
   );
 };
 
-export const Card = ({ card, index, layout = false }: { card: Card; index: number; layout?: boolean }) => {
+export const AppleCard = ({
+  card,
+  index,
+  layout = false
+}: {
+  card: AppleCardType;
+  index: number;
+  layout?: boolean;
+}) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { onCardClose } = useContext(CarouselContext);
+  const { onCardClose } = useContext(AppleCarouselContext);
 
   const handleOpen = () => {
     setOpen(true);

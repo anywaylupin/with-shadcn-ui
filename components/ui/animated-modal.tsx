@@ -7,25 +7,27 @@ import { useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { useOutsideClick } from '@/hooks';
 
-export const ModalContext = createContext<StateContextType>([false, () => {}]);
+export const AnimatedModalContext = createContext<StateContextType>([false, () => {}]);
 
-export const ModalProvider = ({ children }: PropsWithClass) => {
+export const AnimatedModalProvider = ({ children }: PropsWithClass) => {
   const [open, setOpen] = useState(false);
 
-  return <ModalContext.Provider value={[open, setOpen]}>{children}</ModalContext.Provider>;
+  return <AnimatedModalContext.Provider value={[open, setOpen]}>{children}</AnimatedModalContext.Provider>;
 };
 
 export const useModal = () => {
-  const context = useContext(ModalContext);
+  const context = useContext(AnimatedModalContext);
   if (!context) {
     throw new Error('useModal must be used within a ModalProvider');
   }
   return context;
 };
 
-export const Modal = ({ children }: PropsWithClass) => <ModalProvider>{children}</ModalProvider>;
+export const AnimatedModal = ({ children }: PropsWithClass) => (
+  <AnimatedModalProvider>{children}</AnimatedModalProvider>
+);
 
-export const ModalTrigger = ({ children, className }: PropsWithClass) => {
+export const AnimatedModalTrigger = ({ children, className }: PropsWithClass) => {
   const [_, setOpen] = useModal();
 
   return (
@@ -38,7 +40,7 @@ export const ModalTrigger = ({ children, className }: PropsWithClass) => {
   );
 };
 
-export const ModalBody = ({ children, className }: PropsWithClass) => {
+export const AnimatedModalBody = ({ children, className }: PropsWithClass) => {
   const [open, setOpen] = useModal();
 
   useEffect(() => {
@@ -83,11 +85,11 @@ export const ModalBody = ({ children, className }: PropsWithClass) => {
   );
 };
 
-export const ModalContent = ({ children, className }: PropsWithClass) => (
+export const AnimatedModalContent = ({ children, className }: PropsWithClass) => (
   <div className={cn('flex flex-1 flex-col p-8 md:p-10', className)}>{children}</div>
 );
 
-export const ModalFooter = ({ children, className }: PropsWithClass) => (
+export const AnimatedModalFooter = ({ children, className }: PropsWithClass) => (
   <div className={cn('flex justify-end bg-gray-100 p-4 dark:bg-neutral-900', className)}>{children}</div>
 );
 

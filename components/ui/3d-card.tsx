@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 
 import { cn } from '@/lib/utils';
 
-export type CardItemProps = PropsWithClass<{
+export type Card3dItemProps = PropsWithClass<{
   as?: React.ElementType;
   translateX?: Numberish;
   translateY?: Numberish;
@@ -25,7 +25,7 @@ export const useMouseEnter = () => {
   return context;
 };
 
-export const CardContainer = ({ children, className, containerClassName }: PropsWithClass) => {
+export const Card3dContainer = ({ children, className, containerClassName }: PropsWithClass) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isMouseEntered, setIsMouseEntered] = useState(false);
 
@@ -71,13 +71,13 @@ export const CardContainer = ({ children, className, containerClassName }: Props
   );
 };
 
-export const CardBody = ({ children, className }: PropsWithClass) => (
+export const Card3dBody = ({ children, className }: PropsWithClass) => (
   <div className={cn('h-96 w-96 [transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d]', className)}>
     {children}
   </div>
 );
 
-export const CardItem = ({
+export const Card3dItem = ({
   as: Tag = 'div',
   children,
   className,
@@ -88,7 +88,7 @@ export const CardItem = ({
   rotateY = 0,
   rotateZ = 0,
   ...rest
-}: CardItemProps) => {
+}: Card3dItemProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isMouseEntered] = useMouseEnter();
 
