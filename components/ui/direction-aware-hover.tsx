@@ -39,7 +39,7 @@ export const DirectionAwareHover = ({
     right: { x: 20, opacity: 1 }
   };
 
-  const [direction, setDirection] = useState<'top' | 'bottom' | 'left' | 'right' | string>('left');
+  const [direction, setDirection] = useState<'top' | 'bottom' | 'left' | 'right'>('left');
 
   const getDirection = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>, obj: HTMLElement) => {
     const { width: w, height: h, left, top } = obj.getBoundingClientRect();
@@ -49,29 +49,32 @@ export const DirectionAwareHover = ({
     return d;
   }, []);
 
-  const handleMouseEnter = useCallback((event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    if (!ref.current) return;
+  const handleMouseEnter = useCallback(
+    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      if (!ref.current) return;
 
-    const direction = getDirection(event, ref.current);
+      const direction = getDirection(event, ref.current);
 
-    switch (direction) {
-      case 0:
-        setDirection('top');
-        break;
-      case 1:
-        setDirection('right');
-        break;
-      case 2:
-        setDirection('bottom');
-        break;
-      case 3:
-        setDirection('left');
-        break;
-      default:
-        setDirection('left');
-        break;
-    }
-  }, [getDirection]);
+      switch (direction) {
+        case 0:
+          setDirection('top');
+          break;
+        case 1:
+          setDirection('right');
+          break;
+        case 2:
+          setDirection('bottom');
+          break;
+        case 3:
+          setDirection('left');
+          break;
+        default:
+          setDirection('left');
+          break;
+      }
+    },
+    [getDirection]
+  );
 
   return (
     <motion.div
