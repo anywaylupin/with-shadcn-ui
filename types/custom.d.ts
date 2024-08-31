@@ -4,9 +4,9 @@ declare module 'tailwindcss/lib/util/flattenColorPalette' {
 
 declare type Numberish = number | string;
 
-declare type DirectionSide = 'top' | 'bottom' | 'left' | 'right'
+declare type DirectionSide = 'top' | 'bottom' | 'left' | 'right';
 
-declare type StringNode = string | React.ReactNode;
+declare type StringNode = JSX.Element | React.ReactNode | string;
 
 declare type StateContextType<S = boolean> = [S, React.Dispatch<React.SetStateAction<S>>];
 
