@@ -39,7 +39,7 @@ export const DirectionAwareHover = ({
     right: { x: 20, opacity: 1 }
   };
 
-  const [direction, setDirection] = useState<'top' | 'bottom' | 'left' | 'right'>('left');
+  const [direction, setDirection] = useState<DirectionSide>('left');
 
   const getDirection = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>, obj: HTMLElement) => {
     const { width: w, height: h, left, top } = obj.getBoundingClientRect();
