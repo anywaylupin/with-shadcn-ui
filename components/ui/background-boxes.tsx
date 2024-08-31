@@ -1,6 +1,6 @@
 'use client';
 
-import { cn, getRandom } from '@/lib/utils';
+import { cn, getRandomElement } from '@/lib/utils';
 
 import { memo } from 'react';
 import { motion } from 'framer-motion';
@@ -40,7 +40,7 @@ export const BackgroundBoxes = memo(function BackgroundBoxes({
         <motion.div key={`row` + i} className="relative h-8 w-16 border-l border-slate-700">
           {cols.map((_, j) => (
             <motion.div
-              whileHover={{ backgroundColor: `var(${getRandom(colors)})`, transition: { duration: 0 } }}
+              whileHover={{ backgroundColor: `var(${getRandomElement(colors)})`, transition: { duration: 0 } }}
               animate={{ transition: { duration: 2 } }}
               key={`col` + j}
               className="relative h-8 w-16 border-r border-t border-slate-700"

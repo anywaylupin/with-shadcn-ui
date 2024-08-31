@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion, useMotionValue } from 'framer-motion';
-import { cn, getRandom } from '@/lib/utils';
+import { cn, getRandomElement } from '@/lib/utils';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 type FollowerPointerProps = PropsWithClass<{ title: StringNode; colors?: string[] }>;
@@ -73,7 +73,7 @@ export const FollowerPointerCard = ({
             </svg>
 
             <motion.div
-              style={{ backgroundColor: getRandom(colors) }}
+              style={{ backgroundColor: getRandomElement(colors) }}
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}

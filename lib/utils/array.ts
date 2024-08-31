@@ -89,4 +89,4 @@ export const allButFirst = <T>([, ...rest]: T[]) => rest;
  * @param array - The array to get a random element from.
  * @returns A random element from the array.
  */
-export const getRandom = <T>(array: T[]) => array[Math.floor(Math.random() * array.length)];
+export const getRandomElement = <T>(array: T[]) => array[Math.floor(Math.random() * array.length)];
