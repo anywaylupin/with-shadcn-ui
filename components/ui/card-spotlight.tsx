@@ -30,9 +30,9 @@ export const CardSpotlight = ({
     [mouseX, mouseY]
   );
 
-  const [isHovering, setIsHovering] = useState(false);
-  const handleMouseEnter = () => setIsHovering(true);
-  const handleMouseLeave = () => setIsHovering(false);
+  const [hovered, setHovered] = useState(false);
+  const handleMouseEnter = () => setHovered(true);
+  const handleMouseLeave = () => setHovered(false);
 
   return (
     <div
@@ -58,7 +58,7 @@ export const CardSpotlight = ({
           `
         }}
       >
-        {isHovering && (
+        {hovered && (
           <CanvasRevealEffect
             animationSpeed={5}
             containerClassName="bg-transparent absolute inset-0 pointer-events-none"
