@@ -60,7 +60,7 @@ export const FileUpload: AceternityComponent<FileUploadProps> = ({
                 <motion.div
                   key={'file' + idx}
                   layoutId={idx === 0 ? 'file-upload' : 'file-upload-' + idx}
-                  className="elative z-40 mx-auto mt-4 flex w-full flex-col items-start justify-start overflow-hidden rounded-md bg-white p-4 shadow-sm dark:bg-neutral-900 md:h-24"
+                  className="elative z-40 mx-auto mt-4 flex w-full flex-col items-start justify-start overflow-hidden rounded-md bg-white p-4 shadow-sm md:h-24 dark:bg-neutral-900"
                 >
                   <div className="flex w-full items-center justify-between gap-4">
                     <motion.p
@@ -75,13 +75,13 @@ export const FileUpload: AceternityComponent<FileUploadProps> = ({
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       layout
-                      className="shadow-input w-fit flex-shrink-0 rounded-lg px-2 py-1 text-sm text-neutral-600 dark:bg-neutral-800 dark:text-white"
+                      className="w-fit flex-shrink-0 rounded-lg px-2 py-1 text-sm text-neutral-600 shadow-input dark:bg-neutral-800 dark:text-white"
                     >
                       {(file.size / (1024 * 1024)).toFixed(2)} MB
                     </motion.p>
                   </div>
 
-                  <div className="mt-2 flex w-full flex-col items-start justify-between text-sm text-neutral-600 dark:text-neutral-400 md:flex-row md:items-center">
+                  <div className="mt-2 flex w-full flex-col items-start justify-between text-sm text-neutral-600 md:flex-row md:items-center dark:text-neutral-400">
                     <motion.p
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
@@ -158,7 +158,6 @@ export const GridPattern = ({ rows = 11, cols = 41 }: { rows?: number; cols?: nu
     )}
   </div>
 );
-
 
 type FileUploadProps = {
   title?: string;

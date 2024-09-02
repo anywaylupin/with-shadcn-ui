@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 'use client';
 
 import * as THREE from 'three';
@@ -55,18 +56,9 @@ const DotMatrix: AceternityComponent<DotMatrixProps> = ({
         value: colorsArray.map((color) => [color[0] / 255, color[1] / 255, color[2] / 255]),
         type: 'uniform3fv'
       },
-      u_opacities: {
-        value: opacities,
-        type: 'uniform1fv'
-      },
-      u_total_size: {
-        value: totalSize,
-        type: 'uniform1f'
-      },
-      u_dot_size: {
-        value: dotSize,
-        type: 'uniform1f'
-      }
+      u_opacities: { value: opacities, type: 'uniform1fv' },
+      u_total_size: { value: totalSize, type: 'uniform1f' },
+      u_dot_size: { value: dotSize, type: 'uniform1f' }
     };
   }, [colors, opacities, totalSize, dotSize]);
 
@@ -119,9 +111,9 @@ const DotMatrix: AceternityComponent<DotMatrixProps> = ({
   );
 };
 
-const ShaderMaterial = ({ source, uniforms, maxFps = 60 }: ShaderMaterialProps) => {
+const ShaderMaterial: AceternityComponent<ShaderProps> = ({ source, uniforms, maxFps = 60 }) => {
   const { size } = useThree();
-  const ref = useRef<THREE.Mesh>();
+  const ref = useRef<THREE.Mesh>(null);
   let lastFrameTime = 0;
 
   useFrame(({ clock }) => {
@@ -131,40 +123,36 @@ const ShaderMaterial = ({ source, uniforms, maxFps = 60 }: ShaderMaterialProps) 
 
     lastFrameTime = timestamp;
 
-    const material: any = ref.current.material;
-    const timeLocation = material.uniforms.u_time;
-    timeLocation.value = timestamp;
+    const material = ref.current.material as THREE.ShaderMaterial;
+    material.uniforms.u_time.value = timestamp;
   });
 
   const getUniforms = useCallback(() => {
-    const preparedUniforms: any = {};
+    const preparedUniforms: { [key: string]: THREE.IUniform } = {};
 
     for (const uniformName in uniforms) {
-      const uniform: any = uniforms[uniformName];
+      const uniform = uniforms[uniformName];
 
       switch (uniform.type) {
         case 'uniform1f':
-          preparedUniforms[uniformName] = { value: uniform.value, type: '1f' };
+          preparedUniforms[uniformName] = { value: uniform.value };
           break;
         case 'uniform3f':
           preparedUniforms[uniformName] = {
-            value: new THREE.Vector3().fromArray(uniform.value),
-            type: '3f'
+            value: new THREE.Vector3().fromArray(uniform.value as number[])
           };
           break;
         case 'uniform1fv':
-          preparedUniforms[uniformName] = { value: uniform.value, type: '1fv' };
+          preparedUniforms[uniformName] = { value: uniform.value };
           break;
         case 'uniform3fv':
           preparedUniforms[uniformName] = {
-            value: uniform.value.map((v: number[]) => new THREE.Vector3().fromArray(v)),
-            type: '3fv'
+            value: (uniform.value as number[][]).map((v) => new THREE.Vector3().fromArray(v))
           };
           break;
         case 'uniform2f':
           preparedUniforms[uniformName] = {
-            value: new THREE.Vector2().fromArray(uniform.value),
-            type: '2f'
+            value: new THREE.Vector2().fromArray(uniform.value as number[])
           };
           break;
         default:
@@ -173,7 +161,7 @@ const ShaderMaterial = ({ source, uniforms, maxFps = 60 }: ShaderMaterialProps) 
       }
     }
 
-    preparedUniforms['u_time'] = { value: 0, type: '1f' };
+    preparedUniforms['u_time'] = { value: 0 };
     preparedUniforms['u_resolution'] = {
       value: new THREE.Vector2(size.width * 2, size.height * 2)
     }; // Initialize u_resolution
@@ -203,12 +191,10 @@ const ShaderMaterial = ({ source, uniforms, maxFps = 60 }: ShaderMaterialProps) 
       blendSrc: THREE.SrcAlphaFactor,
       blendDst: THREE.OneFactor
     });
-
     return materialObject;
   }, [source, getUniforms]);
-
   return (
-    <mesh ref={ref as any}>
+    <mesh ref={ref}>
       <planeGeometry args={[2, 2]} />
       <primitive object={material} attach="material" />
     </mesh>
@@ -223,7 +209,6 @@ const Shader = ({ source, uniforms, maxFps = 60 }: ShaderProps) => (
 
 type ShaderUniforms = { [key: string]: { value: number[] | number[][] | number; type: string } };
 type ShaderProps = { source: string; maxFps?: number; uniforms: ShaderUniforms };
-type ShaderMaterialProps = ShaderProps & { hovered?: boolean };
 
 type CanvasRevealEffectProps = {
   /** 0.1 - slower | 1.0 - faster */

@@ -25,7 +25,7 @@ export const HeroParallax: AceternityComponent<{ items: HeroParallaxItem[] }> = 
   return (
     <div
       ref={ref}
-      className="transform-3d relative flex h-[300vh] flex-col self-auto overflow-hidden py-40 antialiased [perspective:1000px]"
+      className="relative flex h-[300vh] flex-col self-auto overflow-hidden py-40 antialiased transform-3d [perspective:1000px]"
     >
       <Header />
       <motion.div style={{ rotateX, rotateZ, translateY, opacity }}>
@@ -51,10 +51,10 @@ export const HeroParallax: AceternityComponent<{ items: HeroParallaxItem[] }> = 
 
 export const Header: AceternityComponent = () => (
   <div className="relative left-0 top-0 mx-auto w-full max-w-7xl px-4 py-20 md:py-40">
-    <h1 className="text-2xl font-bold dark:text-white md:text-7xl">
+    <h1 className="text-2xl font-bold md:text-7xl dark:text-white">
       The Ultimate <br /> development studio
     </h1>
-    <p className="mt-8 max-w-2xl text-base dark:text-neutral-200 md:text-xl">
+    <p className="mt-8 max-w-2xl text-base md:text-xl dark:text-neutral-200">
       We build beautiful items with the latest technologies and frameworks. We are a team of passionate developers and
       designers that love to build amazing items.
     </p>

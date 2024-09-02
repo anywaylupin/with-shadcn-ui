@@ -68,7 +68,7 @@ const Star: AceternityComponent<{ isGlowing: boolean; delay: number }> = ({ isGl
     key={delay}
     initial={{ scale: 1 }}
     animate={{ scale: isGlowing ? [1, 1.2, 2.5, 2.2, 1.5] : 1, background: isGlowing ? '#fff' : '#666' }}
-    transition={{ duration: 2, ease: 'easeInOut', delay: delay }}
+    transition={{ duration: 2, ease: 'easeInOut', delay }}
     className={cn('relative z-20 h-[1px] w-[1px] rounded-full bg-[#666]')}
   ></motion.div>
 );
@@ -77,7 +77,7 @@ const Glow: AceternityComponent<{ delay: number }> = ({ delay }) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
-    transition={{ duration: 2, ease: 'easeInOut', delay: delay }}
+    transition={{ duration: 2, ease: 'easeInOut', delay }}
     exit={{ opacity: 0 }}
     className="absolute left-1/2 z-10 h-[4px] w-[4px] -translate-x-1/2 rounded-full bg-blue-500 shadow-2xl shadow-blue-400 blur-[1px]"
   />

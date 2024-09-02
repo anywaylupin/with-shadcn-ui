@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 import { cn } from '@/lib/utils';
 import { createNoise3D } from 'simplex-noise';
@@ -24,72 +24,81 @@ export const WavyBackground: AceternityComponent<
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const noise = createNoise3D();
 
-  let w: number, h: number, nt: number, i: number, x: number;
-  let animationId: number;
+  const animationId = useRef<number | null>(null);
+  const w = useRef<number>(0);
+  const h = useRef<number>(0);
+  const nt = useRef<number>(0);
 
-  const getSpeed = () => {
+  const getSpeed = useCallback(() => {
     switch (speed) {
-      default:
       case 'slow':
         return 0.001;
       case 'fast':
         return 0.002;
+      default:
+        return 0.001;
     }
-  };
+  }, [speed]);
 
-  const resize = (ctx: CanvasRenderingContext2D) => {
-    w = ctx.canvas.width = window.innerWidth;
-    h = ctx.canvas.height = window.innerHeight;
-    ctx.filter = `blur(${blur}px)`;
-  };
+  const drawWave = useCallback(
+    (n: number) => {
+      const ctx = canvasRef.current?.getContext('2d');
+      if (!ctx || typeof nt.current !== 'number') return;
 
-  const init = () => {
-    const canvas = canvasRef.current;
-    const ctx = canvas?.getContext('2d');
-    if (!ctx) return;
+      nt.current += getSpeed();
 
-    nt = 0;
-    resize(ctx);
-    window.onresize = () => resize(ctx);
+      for (let i = 0; i < n; i++) {
+        ctx.beginPath();
+        ctx.lineWidth = width;
+        ctx.strokeStyle = colors[i % colors.length];
 
-    render();
-  };
+        for (let x = 0; x < w.current; x += 5) {
+          const y = noise(x / 800, 0.3 * i, nt.current) * 100;
+          ctx.lineTo(x, y + h.current * 0.5);
+        }
 
-  const drawWave = (n: number) => {
-    const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) return;
-
-    nt += getSpeed();
-    for (i = 0; i < n; i++) {
-      ctx.beginPath();
-      ctx.lineWidth = width;
-      ctx.strokeStyle = colors[i % colors.length];
-
-      for (x = 0; x < w; x += 5) {
-        const y = noise(x / 800, 0.3 * i, nt) * 100;
-        ctx.lineTo(x, y + h * 0.5);
+        ctx.stroke();
+        ctx.closePath();
       }
+    },
+    [colors, getSpeed, noise, width]
+  );
 
-      ctx.stroke();
-      ctx.closePath();
-    }
-  };
+  const resize = useCallback(
+    (ctx: CanvasRenderingContext2D) => {
+      w.current = ctx.canvas.width = window.innerWidth;
+      h.current = ctx.canvas.height = window.innerHeight;
+      ctx.filter = `blur(${blur}px)`;
+    },
+    [blur]
+  );
 
-  const render = () => {
+  const render = useCallback(() => {
     const ctx = canvasRef.current?.getContext('2d');
     if (!ctx) return;
 
     ctx.fillStyle = fill;
     ctx.globalAlpha = opacity;
-    ctx.fillRect(0, 0, w, h);
+    ctx.fillRect(0, 0, w.current, h.current);
     drawWave(5);
-    animationId = requestAnimationFrame(render);
-  };
+    animationId.current = requestAnimationFrame(render);
+  }, [drawWave, fill, h, opacity, w]);
 
   useEffect(() => {
-    init();
-    return () => cancelAnimationFrame(animationId);
-  }, []);
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (!ctx) return;
+
+    nt.current = 0;
+    resize(ctx);
+    window.onresize = () => resize(ctx);
+
+    render();
+
+    return () => {
+      if (animationId.current) cancelAnimationFrame(animationId.current);
+    };
+  }, [animationId, render, resize]);
 
   const [isSafari] = useSafari();
 

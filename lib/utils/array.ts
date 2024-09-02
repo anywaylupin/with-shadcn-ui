@@ -20,7 +20,7 @@ export const chunk = <T>(array: T[], size = 1): T[][] => [array.slice(0, size)].
  * @param args - Additional arrays or values to merge.
  * @returns A new array with all values merged.
  */
-export const merge = <T>(array: T[], ...args: Array<unknown>) => [...array, ...args.flat()] as T[];
+export const merge = <T>(array: T[], ...args: unknown[]) => [...array, ...args.flat()] as T[];
 
 /**
  * Gets the last element of an array.
@@ -37,7 +37,12 @@ export const last = <T>(array: T[]) => array[array.length - 1];
  */
 export const uniq = <T>(array: T[], sort = false) => {
   const uniqueArray = Array.from(new Set(array));
-  return sort ? uniqueArray.sort() : uniqueArray;
+  return sort
+    ? uniqueArray.sort((a, b) => {
+        if (a === b) return 0;
+        else return a > b ? 1 : -1;
+      })
+    : uniqueArray;
 };
 
 /**

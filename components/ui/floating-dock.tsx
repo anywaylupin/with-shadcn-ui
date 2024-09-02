@@ -60,7 +60,7 @@ const FloatingDockDesktop = ({ items, className }: PropsWithClass<{ items: Float
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        'mx-auto hidden h-16 items-end gap-4 rounded-2xl bg-gray-50 px-4 pb-3 dark:bg-neutral-900 md:flex',
+        'mx-auto hidden h-16 items-end gap-4 rounded-2xl bg-gray-50 px-4 pb-3 md:flex dark:bg-neutral-900',
         className
       )}
     >
@@ -124,7 +124,7 @@ const IconContainer = ({ mouseX, title, icon, href }: IconContainer) => {
   );
 };
 
-type FloatingDockItem = {id: React.Key, title: string; icon: React.ReactNode; href: string };
+type FloatingDockItem = { id: React.Key; title: string; icon: React.ReactNode; href: string };
 
 type FloatingDockProps = {
   items: FloatingDockItem[];

@@ -1,7 +1,6 @@
-import { useCallback, useMemo } from 'react';
-
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
+import { useMemo } from 'react';
 
 export const BackgroundGradient: AceternityComponent<{ animate?: boolean; colors?: string[] }> = ({
   children,

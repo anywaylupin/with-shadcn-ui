@@ -5,7 +5,11 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-export const FlipWords: AceternityComponent<{ words: string[]; duration?: number }> = ({ words, duration = 3000, className }) => {
+export const FlipWords: AceternityComponent<{ words: string[]; duration?: number }> = ({
+  words,
+  duration = 3000,
+  className
+}) => {
   const [currentWord, setCurrentWord] = useState(words[0]);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
 

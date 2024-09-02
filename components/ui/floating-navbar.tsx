@@ -33,7 +33,7 @@ export const FloatingNav: AceternityComponent<{ items: FloatingNavItem[] }> = ({
           className
         )}
       >
-        {items.map((navItem: any, idx: number) => (
+        {items.map((navItem, idx: number) => (
           <Link
             key={`link=${idx}`}
             href={navItem.link}

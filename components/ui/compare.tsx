@@ -1,7 +1,7 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react';
 
 import { IconDotsVertical } from '@tabler/icons-react';
 import Image from 'next/image';
@@ -22,8 +22,6 @@ export const Compare: AceternityComponent<CompareProps> = ({
   const [isDragging, setIsDragging] = useState(false);
 
   const sliderRef = useRef<HTMLDivElement>(null);
-
-  const [isMouseOver, setIsMouseOver] = useState(false);
 
   const autoplayRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -55,32 +53,12 @@ export const Compare: AceternityComponent<CompareProps> = ({
     return () => stopAutoplay();
   }, [startAutoplay, stopAutoplay]);
 
-  const mouseEnterHandler = useCallback(() => {
-    setIsMouseOver(true);
-    stopAutoplay();
-  }, [stopAutoplay]);
-
-  const mouseLeaveHandler = useCallback(() => {
-    setIsMouseOver(false);
-
-    if (mode === 'hover') {
-      setSliderXPercent(initialSliderPercentage);
-    } else if (mode === 'drag') {
-      setIsDragging(false);
-    }
-
-    startAutoplay();
-  }, [initialSliderPercentage, mode, startAutoplay]);
-
-  const handleStart = useCallback(
-    (clientX: number) => {
-      mode === 'drag' && setIsDragging(true);
-    },
-    [mode]
-  );
+  const handleStart = useCallback(() => {
+    if (mode === 'drag') setIsDragging(true);
+  }, [mode]);
 
   const handleEnd = useCallback(() => {
-    mode === 'drag' && setIsDragging(false);
+    if (mode === 'drag') setIsDragging(false);
   }, [mode]);
 
   const handleMove = useCallback(
@@ -90,36 +68,30 @@ export const Compare: AceternityComponent<CompareProps> = ({
         const rect = sliderRef.current.getBoundingClientRect();
         const x = clientX - rect.left;
         const percent = (x / rect.width) * 100;
-        requestAnimationFrame(() => {
-          setSliderXPercent(Math.max(0, Math.min(100, percent)));
-        });
+        requestAnimationFrame(() => setSliderXPercent(Math.max(0, Math.min(100, percent))));
       }
     },
     [mode, isDragging]
   );
 
-  const handleMouseDown = useCallback((e: React.MouseEvent) => handleStart(e.clientX), [handleStart]);
-  const handleMouseUp = useCallback(() => handleEnd(), [handleEnd]);
-  const handleMouseMove = useCallback((e: React.MouseEvent) => handleMove(e.clientX), [handleMove]);
+  const handleMouseLeave = useCallback(() => {
+    if (mode === 'hover') setSliderXPercent(initialSliderPercentage);
+    else if (mode === 'drag') setIsDragging(false);
 
-  const handleTouchStart = useCallback(
-    (e: React.TouchEvent) => {
-      if (!autoplay) {
-        handleStart(e.touches[0].clientX);
-      }
-    },
-    [handleStart, autoplay]
-  );
+    startAutoplay();
+  }, [initialSliderPercentage, mode, startAutoplay]);
+
+  const handleTouchStart = useCallback(() => {
+    if (!autoplay) handleStart();
+  }, [handleStart, autoplay]);
 
   const handleTouchEnd = useCallback(() => {
-    if (!autoplay) {
-      handleEnd();
-    }
+    if (!autoplay) handleEnd();
   }, [handleEnd, autoplay]);
 
   const handleTouchMove = useCallback(
     (e: React.TouchEvent) => {
-      !autoplay && handleMove(e.touches[0].clientX);
+      if (!autoplay) handleMove(e.touches[0].clientX);
     },
     [handleMove, autoplay]
   );
@@ -129,11 +101,11 @@ export const Compare: AceternityComponent<CompareProps> = ({
       ref={sliderRef}
       className={cn('h-[400px] w-[400px] overflow-hidden', className)}
       style={{ position: 'relative', cursor: mode === 'drag' ? 'grab' : 'col-resize' }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={mouseLeaveHandler}
-      onMouseEnter={mouseEnterHandler}
-      onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
+      onMouseDown={() => handleStart()}
+      onMouseUp={() => handleEnd()}
+      onMouseMove={(e) => handleMove(e.clientX)}
+      onMouseEnter={() => stopAutoplay()}
+      onMouseLeave={handleMouseLeave}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onTouchMove={handleTouchMove}

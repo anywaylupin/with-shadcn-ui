@@ -38,7 +38,7 @@ export const PlaceholdersAndVanishInput: AceternityComponent<{
   }, [handleVisibilityChange, placeholders, startAnimation]);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const newDataRef = useRef<any[]>([]);
+  const newDataRef = useRef<{ x: number; y: number; r: number; color: string }[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState('');
   const [animating, setAnimating] = useState(false);
@@ -62,12 +62,12 @@ export const PlaceholdersAndVanishInput: AceternityComponent<{
 
     const imageData = ctx.getImageData(0, 0, 800, 800);
     const pixelData = imageData.data;
-    const newData: any[] = [];
+    const newData: { x: number; y: number; color: number[] }[] = [];
 
     for (let t = 0; t < 800; t++) {
-      let i = 4 * t * 800;
+      const i = 4 * t * 800;
       for (let n = 0; n < 800; n++) {
-        let e = i + 4 * n;
+        const e = i + 4 * n;
         if (pixelData[e] !== 0 && pixelData[e + 1] !== 0 && pixelData[e + 2] !== 0) {
           newData.push({
             x: n,
@@ -93,19 +93,19 @@ export const PlaceholdersAndVanishInput: AceternityComponent<{
   const animate = useCallback((pos: number = 0) => {
     requestAnimationFrame(() => {
       const newArr = [];
-      for (const current of newDataRef.current) {
-        if (current.x < pos) {
-          newArr.push(current);
+      for (const data of newDataRef.current) {
+        if (data.x < pos) {
+          newArr.push(data);
         } else {
-          if (current.r <= 0) {
-            current.r = 0;
+          if (data.r <= 0) {
+            data.r = 0;
             continue;
           }
 
-          current.x += getOffset();
-          current.y += getOffset();
-          current.r -= 0.05 * Math.random();
-          newArr.push(current);
+          data.x += getOffset();
+          data.y += getOffset();
+          data.r -= 0.05 * Math.random();
+          newArr.push(data);
         }
       }
       newDataRef.current = newArr;

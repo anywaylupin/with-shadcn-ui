@@ -23,7 +23,6 @@ export const ImagesSlider: AceternityComponent<{
   direction = 'up'
 }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loading, setLoading] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [loadedImages, setLoadedImages] = useState<string[]>([]);
 
@@ -45,7 +44,6 @@ export const ImagesSlider: AceternityComponent<{
   }, [handlePlay, images.length, playing]);
 
   useEffect(() => {
-    setLoading(true);
     const loadPromises = images.map(
       (image) =>
         new Promise<string>((resolve, reject) => {
@@ -57,10 +55,7 @@ export const ImagesSlider: AceternityComponent<{
     );
 
     Promise.all(loadPromises)
-      .then((loadedImages) => {
-        setLoadedImages(loadedImages);
-        setLoading(false);
-      })
+      .then((loadedImages) => setLoadedImages(loadedImages))
       .catch((error) => console.error('Failed to load images', error));
   }, [images]);
 

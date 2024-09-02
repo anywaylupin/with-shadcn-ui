@@ -10,7 +10,7 @@ export const Button: AceternityComponent<{
   as?: React.ElementType;
   borderClassName?: string;
   duration?: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }> = ({
   borderRadius = '1.75rem',
   children,
@@ -56,7 +56,7 @@ export const MovingBorder: AceternityComponent<{ duration?: number; rx?: string;
   ry,
   ...rest
 }) => {
-  const pathRef = useRef<any>();
+  const pathRef = useRef<SVGRectElement>(null);
   const progress = useMotionValue<number>(0);
 
   useAnimationFrame((time) => {

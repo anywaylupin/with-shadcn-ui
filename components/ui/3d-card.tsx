@@ -62,7 +62,7 @@ export const CardContainer: AceternityComponent = ({ children, className, contai
 };
 
 export const CardBody: AceternityComponent = ({ children, className }) => (
-  <div className={cn('transform-3d [&>*]:transform-3d h-96 w-96', className)}>{children}</div>
+  <div className={cn('h-96 w-96 transform-3d [&>*]:transform-3d', className)}>{children}</div>
 );
 
 export const CardItem: AceternityComponent<CardItemProps> = ({
@@ -104,5 +104,5 @@ type CardItemProps = {
   rotateX?: Numberish;
   rotateY?: Numberish;
   rotateZ?: Numberish;
-  [key: string]: any;
+  [key: string]: unknown;
 };

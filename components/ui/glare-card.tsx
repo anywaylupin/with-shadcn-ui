@@ -22,7 +22,7 @@ export const GlareCard: AceternityComponent = ({ children, className }) => {
     '--radius': '48px',
     '--easing': 'ease',
     '--transition': 'var(--duration) var(--easing)'
-  } as CSSProperties;
+  };
 
   const backgroundStyle = {
     '--step': '5%',
@@ -51,7 +51,7 @@ export const GlareCard: AceternityComponent = ({ children, className }) => {
   return (
     <div
       ref={ref}
-      style={containerStyle}
+      style={containerStyle as CSSProperties}
       className="duration-[var(--duration)] ease-[var(--easing)] delay-[var(--delay)] relative isolate w-[320px] transition-transform will-change-transform [aspect-ratio:17/21] [contain:layout_style] [perspective:600px]"
       onPointerMove={(event) => {
         const rotateFactor = 0.4;

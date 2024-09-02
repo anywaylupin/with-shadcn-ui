@@ -39,16 +39,17 @@ export const BackgroundBeamsWithCollision: AceternityComponent = ({ children, cl
       {children}
       <div
         ref={containerRef}
-        className="shadow-beam-collision pointer-events-none absolute inset-x-0 bottom-0 w-full bg-neutral-100"
+        className="pointer-events-none absolute inset-x-0 bottom-0 w-full bg-neutral-100 shadow-beam-collision"
       ></div>
     </div>
   );
 };
 
-const CollisionMechanism = forwardRef<HTMLDivElement, CollisionMechanismProps>(function CollisionMechanism(
-  { parentRef, containerRef, beamOptions = {} },
-  ref
-) {
+const CollisionMechanism = forwardRef<HTMLDivElement, CollisionMechanismProps>(function CollisionMechanism({
+  parentRef,
+  containerRef,
+  beamOptions = {}
+}) {
   const beamRef = useRef<HTMLDivElement>(null);
 
   const [collision, setCollision] = useState<{ detected: boolean; coordinates: { x: number; y: number } | null }>({
@@ -142,7 +143,7 @@ const CollisionMechanism = forwardRef<HTMLDivElement, CollisionMechanismProps>(f
   );
 });
 
-const Explosion: AceternityComponent<{}, HTMLDivElement> = ({ className, ...rest }) => {
+const Explosion: AceternityComponent<unknown, HTMLDivElement> = ({ className, ...rest }) => {
   const spans = Array.from({ length: 20 }, (_, index) => ({
     id: index,
     initialX: 0,

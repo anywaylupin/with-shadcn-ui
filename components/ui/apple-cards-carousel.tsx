@@ -57,7 +57,7 @@ export const Carousel: AceternityComponent<CarouselProps> = ({ items, initialScr
     <CarouselContext.Provider value={providerValue}>
       <div className="relative w-full">
         <div
-          className="scrollbar-none flex w-full overflow-x-scroll overscroll-x-auto scroll-smooth py-10 md:py-20"
+          className="flex w-full overflow-x-scroll overscroll-x-auto scroll-smooth py-10 scrollbar-none md:py-20"
           ref={ref}
           onScroll={checkScrollability}
         >
@@ -146,7 +146,7 @@ export const Card = ({ card, index, layout = false }: { card: CardType; index: n
               exit={{ opacity: 0 }}
               ref={containerRef}
               layoutId={layout ? `card-${card.title}` : undefined}
-              className="relative z-[60] mx-auto my-10 h-fit max-w-5xl rounded-3xl bg-white p-4 font-sans dark:bg-neutral-900 md:p-10"
+              className="relative z-[60] mx-auto my-10 h-fit max-w-5xl rounded-3xl bg-white p-4 font-sans md:p-10 dark:bg-neutral-900"
             >
               <button
                 className="sticky right-0 top-4 ml-auto flex h-8 w-8 items-center justify-center rounded-full bg-black dark:bg-white"
@@ -162,7 +162,7 @@ export const Card = ({ card, index, layout = false }: { card: CardType; index: n
               </motion.p>
               <motion.p
                 layoutId={layout ? `title-${card.title}` : undefined}
-                className="mt-4 text-2xl font-semibold text-neutral-700 dark:text-white md:text-5xl"
+                className="mt-4 text-2xl font-semibold text-neutral-700 md:text-5xl dark:text-white"
               >
                 {card.title}
               </motion.p>
@@ -175,7 +175,7 @@ export const Card = ({ card, index, layout = false }: { card: CardType; index: n
       <motion.button
         layoutId={layout ? `card-${card.title}` : undefined}
         onClick={() => setOpen(true)}
-        className="relative z-10 flex h-80 w-56 flex-col items-start justify-start overflow-hidden rounded-3xl bg-gray-100 dark:bg-neutral-900 md:h-[40rem] md:w-96"
+        className="relative z-10 flex h-80 w-56 flex-col items-start justify-start overflow-hidden rounded-3xl bg-gray-100 md:h-[40rem] md:w-96 dark:bg-neutral-900"
       >
         <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-full bg-gradient-to-b from-black/50 via-transparent to-transparent" />
         <div className="relative z-40 p-8">

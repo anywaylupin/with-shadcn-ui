@@ -6,11 +6,12 @@ import styleGuide from '@vercel/style-guide/prettier';
  */
 const config = {
   ...styleGuide,
-  singleQuote: true,
   tabWidth: 2,
   printWidth: 120,
-  trailingComma: 'none',
   semi: true,
+  useTabs: false,
+  singleQuote: true,
+  trailingComma: 'none',
   plugins: [...styleGuide.plugins, 'prettier-plugin-tailwindcss']
 };
 

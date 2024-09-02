@@ -42,7 +42,7 @@ const LoaderCore: AceternityComponent<{
           key={index}
           className={cn('mb-4 flex gap-2 text-left')}
           initial={{ opacity: 0, y: -(value * 40) }}
-          animate={{ opacity: opacity, y: -(value * 40) }}
+          animate={{ opacity, y: -(value * 40) }}
           transition={{ duration: 0.5 }}
         >
           <div>

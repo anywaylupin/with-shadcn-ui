@@ -1,10 +1,10 @@
 'use client';
 
-import type { Container, SingleOrMultiple } from '@tsparticles/engine';
 import Particles, { initParticlesEngine } from '@tsparticles/react';
 import { motion, useAnimation } from 'framer-motion';
 import { useCallback, useEffect, useId, useState } from 'react';
 
+import type { Container } from '@tsparticles/engine';
 import { cn } from '@/lib/utils';
 import { loadSlim } from '@tsparticles/slim';
 
@@ -51,7 +51,7 @@ export const SparklesCore: AceternityComponent<SparklesCoreProps> = ({
               events: {
                 onClick: { enable: true, mode: 'push' },
                 onHover: { enable: false, mode: 'repulse' },
-                resize: true as any
+                resize: { enable: true }
               },
               modes: { push: { quantity: 4 }, repulse: { distance: 200, duration: 0.4 } }
             },
@@ -76,8 +76,7 @@ export const SparklesCore: AceternityComponent<SparklesCoreProps> = ({
               effect: {
                 close: true,
                 fill: true,
-                options: {},
-                type: {} as SingleOrMultiple<string> | undefined
+                options: {}
               },
               groups: {},
               move: {

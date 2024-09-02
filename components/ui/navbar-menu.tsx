@@ -53,7 +53,7 @@ export const Menu: AceternityComponent<{ setActive: (item: string | null) => voi
   <nav
     role="menu"
     onMouseLeave={() => setActive(null)} // resets the state
-    className="shadow-input relative flex justify-center space-x-4 rounded-full border border-transparent bg-white px-8 py-6 dark:border-white/[0.2] dark:bg-black"
+    className="relative flex justify-center space-x-4 rounded-full border border-transparent bg-white px-8 py-6 shadow-input dark:border-white/[0.2] dark:bg-black"
   >
     {children}
   </nav>

@@ -10,7 +10,7 @@ export const TextRevealCard: AceternityComponent<{
   revealText: string;
   amount?: number;
 }> = ({ text, revealText, amount, children, className }) => {
-  const ref = useRef<HTMLDivElement | any>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const [isMouseOver, setIsMouseOver] = useState(false);
   const [left, setLeft] = useState(0);
   const [localWidth, setLocalWidth] = useState(0);

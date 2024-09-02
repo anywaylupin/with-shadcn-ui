@@ -10,7 +10,7 @@ export const StickyScroll: AceternityComponent<{
   content: StickyScrollItem[];
   contentClassName?: string;
 }> = ({ content, contentClassName }) => {
-  const ref = useRef<any>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ container: ref, offset: ['start start', 'end start'] });
 
   const backgroundColors = ['var(--slate-900)', 'var(--black)', 'var(--neutral-900)'];

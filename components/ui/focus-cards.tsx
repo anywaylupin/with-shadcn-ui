@@ -11,7 +11,7 @@ export const FocusCard = memo<FocusCardProps>(function FocusCard({ card, index, 
       onMouseEnter={() => setHovered(index)}
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        'relative h-60 w-full overflow-hidden rounded-lg bg-gray-100 transition-all duration-300 ease-out dark:bg-neutral-900 md:h-96',
+        'relative h-60 w-full overflow-hidden rounded-lg bg-gray-100 transition-all duration-300 ease-out md:h-96 dark:bg-neutral-900',
         hovered !== null && hovered !== index && 'scale-[0.98] blur-sm'
       )}
     >
@@ -49,7 +49,7 @@ export const FocusCardContainer: AceternityComponent<{ items: FocusCardItem[] }>
 };
 
 export type FocusCardProps = {
-  card: any;
+  card: FocusCardItem;
   index: number;
   hovered: number | null;
   setHovered: React.Dispatch<React.SetStateAction<number | null>>;

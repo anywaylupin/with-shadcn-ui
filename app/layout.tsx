@@ -12,9 +12,7 @@ export const metadata: Metadata = {
 
 const RootLayout = ({ children }: Readonly<React.PropsWithChildren>) => (
   <html lang="en">
-    <body className={inter.className}>
-      {children}
-    </body>
+    <body className={inter.className}>{children}</body>
   </html>
 );
 

@@ -9,7 +9,7 @@ import { useRef } from 'react';
 export const ParallaxScroll: AceternityComponent<{
   items: { id: React.Key; src: string }[];
 }> = ({ items, className }) => {
-  const ref = useRef<any>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ container: ref, offset: ['start start', 'end start'] });
 
   const translateFirst = useTransform(scrollYProgress, [0, 1], [0, -200]);

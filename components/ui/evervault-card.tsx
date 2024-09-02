@@ -14,8 +14,8 @@ export const EvervaultCard: AceternityComponent<{ text?: string }> = ({ text, cl
 
   useEffect(() => setRandomString(generateRandomString(1500)), []);
 
-  const onMouseMove = useCallback(
-    ({ currentTarget, clientX, clientY }: any) => {
+  const onMouseMove = useCallback<React.MouseEventHandler<HTMLDivElement>>(
+    ({ currentTarget, clientX, clientY }) => {
       const { left, top } = currentTarget.getBoundingClientRect();
       mouseX.set(clientX - left);
       mouseY.set(clientY - top);

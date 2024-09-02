@@ -24,7 +24,7 @@ export const Modal: AceternityComponent = ({ children }) => {
 };
 
 export const ModalTrigger: AceternityComponent = ({ children, className }) => {
-  const [_, setOpen] = useModal();
+  const [, setOpen] = useModal();
 
   return (
     <button
@@ -53,14 +53,14 @@ export const ModalBody: AceternityComponent = ({ children, className }) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, backdropFilter: 'blur(10px)' }}
           exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-          className="transform-3d fixed inset-0 z-50 flex h-full w-full items-center justify-center [perspective:800px]"
+          className="fixed inset-0 z-50 flex h-full w-full items-center justify-center transform-3d [perspective:800px]"
         >
           <Overlay />
 
           <motion.div
             ref={ref}
             className={cn(
-              'relative z-50 flex max-h-[90%] min-h-[50%] flex-1 flex-col overflow-hidden border border-transparent bg-white dark:border-neutral-800 dark:bg-neutral-950 md:max-w-[40%] md:rounded-2xl',
+              'relative z-50 flex max-h-[90%] min-h-[50%] flex-1 flex-col overflow-hidden border border-transparent bg-white md:max-w-[40%] md:rounded-2xl dark:border-neutral-800 dark:bg-neutral-950',
               className
             )}
             initial={{ opacity: 0, scale: 0.5, rotateX: 40, y: 40 }}
@@ -95,7 +95,7 @@ const Overlay: AceternityComponent = ({ className }) => (
 );
 
 const CloseIcon: AceternityComponent = () => {
-  const [_, setOpen] = useModal();
+  const [, setOpen] = useModal();
 
   return (
     <button onClick={() => setOpen(false)} className="group absolute right-4 top-4">

@@ -36,7 +36,7 @@ export const Input = forwardRef<HTMLInputElement, React.InputHTMLAttributes<HTML
         <input
           type={type}
           className={cn(
-            `shadow-input duration-400 flex h-10 w-full rounded-md border-none bg-gray-50 px-3 py-2 text-sm text-black transition group-hover/input:shadow-none`,
+            `duration-400 flex h-10 w-full rounded-md border-none bg-gray-50 px-3 py-2 text-sm text-black shadow-input transition group-hover/input:shadow-none`,
             `placeholder:text-neutral-400`,
             `file:border-0 file:bg-transparent file:text-sm file:font-medium`,
             `focus-visible:outline-none focus-visible:ring-[2px] focus-visible:ring-neutral-400`,

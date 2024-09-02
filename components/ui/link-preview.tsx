@@ -3,7 +3,7 @@
 import * as HoverCardPrimitive from '@radix-ui/react-hover-card';
 
 import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -48,9 +48,9 @@ export const LinkPreview: AceternityComponent<LinkPreviewProps> = ({
   const x = useMotionValue(0);
   const translateX = useSpring(x, { stiffness, damping });
 
-  const handleMouseMove = useCallback(
-    (event: any) => {
-      const targetRect = event.target.getBoundingClientRect();
+  const handleMouseMove = useCallback<React.MouseEventHandler<HTMLAnchorElement>>(
+    (event) => {
+      const targetRect = (event.target as HTMLAnchorElement).getBoundingClientRect();
       const eventOffsetX = event.clientX - targetRect.left;
       const offsetFromCenter = (eventOffsetX - targetRect.width / 2) / 2; // Reduce the effect to make it subtle
       x.set(offsetFromCenter);
@@ -62,14 +62,7 @@ export const LinkPreview: AceternityComponent<LinkPreviewProps> = ({
     <>
       {isMounted && (
         <div className="hidden">
-          <Image
-            src={src}
-            width={width}
-            height={height}
-            quality={quality}
-            priority
-            alt="hidden image"
-          />
+          <Image src={src} width={width} height={height} quality={quality} priority alt="hidden image" />
         </div>
       )}
 
