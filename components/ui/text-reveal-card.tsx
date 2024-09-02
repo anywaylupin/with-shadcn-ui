@@ -1,183 +1,139 @@
-"use client";
-import React, { useEffect, useRef, useState, memo } from "react";
-import { motion } from "framer-motion";
-import { twMerge } from "tailwind-merge";
-import { cn } from "@/lib/utils";
+'use client';
 
-export const TextRevealCard = ({
-  text,
-  revealText,
-  children,
-  className,
-}: {
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
+
+import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+
+export const TextRevealCard: AceternityComponent<{
   text: string;
   revealText: string;
-  children?: React.ReactNode;
-  className?: string;
-}) => {
-  const [widthPercentage, setWidthPercentage] = useState(0);
-  const cardRef = useRef<HTMLDivElement | any>(null);
+  amount?: number;
+}> = ({ text, revealText, amount, children, className }) => {
+  const ref = useRef<HTMLDivElement | any>(null);
+  const [isMouseOver, setIsMouseOver] = useState(false);
   const [left, setLeft] = useState(0);
   const [localWidth, setLocalWidth] = useState(0);
-  const [isMouseOver, setIsMouseOver] = useState(false);
+  const [widthPercentage, setWidthPercentage] = useState(0);
 
   useEffect(() => {
-    if (cardRef.current) {
-      const { left, width: localWidth } =
-        cardRef.current.getBoundingClientRect();
-      setLeft(left);
-      setLocalWidth(localWidth);
-    }
+    if (!ref.current) return;
+    const { left, width } = ref.current.getBoundingClientRect();
+    setLeft(left);
+    setLocalWidth(width);
   }, []);
 
-  function mouseMoveHandler(event: any) {
-    event.preventDefault();
+  const handleMouseMove = useCallback<React.MouseEventHandler<HTMLDivElement>>(
+    (e) => {
+      e.preventDefault();
+      if (!ref.current) return;
 
-    const { clientX } = event;
-    if (cardRef.current) {
+      const { clientX } = e;
       const relativeX = clientX - left;
       setWidthPercentage((relativeX / localWidth) * 100);
-    }
-  }
+    },
+    [left, localWidth]
+  );
 
-  function mouseLeaveHandler() {
+  const handleMouseLeave = useCallback(() => {
     setIsMouseOver(false);
     setWidthPercentage(0);
-  }
-  function mouseEnterHandler() {
+  }, []);
+
+  const handleMouseEnter = useCallback(() => {
     setIsMouseOver(true);
-  }
-  function touchMoveHandler(event: React.TouchEvent<HTMLDivElement>) {
-    event.preventDefault();
-    const clientX = event.touches[0]!.clientX;
-    if (cardRef.current) {
+  }, []);
+
+  const handleTouchMove = useCallback<React.TouchEventHandler<HTMLDivElement>>(
+    (e) => {
+      e.preventDefault();
+      if (!ref.current) return;
+
+      const clientX = e.touches[0]!.clientX;
       const relativeX = clientX - left;
       setWidthPercentage((relativeX / localWidth) * 100);
-    }
-  }
+    },
+    [left, localWidth]
+  );
 
   const rotateDeg = (widthPercentage - 50) * 0.1;
+
   return (
     <div
-      onMouseEnter={mouseEnterHandler}
-      onMouseLeave={mouseLeaveHandler}
-      onMouseMove={mouseMoveHandler}
-      onTouchStart={mouseEnterHandler}
-      onTouchEnd={mouseLeaveHandler}
-      onTouchMove={touchMoveHandler}
-      ref={cardRef}
+      aria-hidden
+      ref={ref}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onMouseMove={handleMouseMove}
+      onTouchStart={handleMouseEnter}
+      onTouchEnd={handleMouseLeave}
+      onTouchMove={handleTouchMove}
       className={cn(
-        "bg-[#1d1c20] border border-white/[0.08] w-[40rem] rounded-lg p-8 relative overflow-hidden",
+        'relative w-[40rem] overflow-hidden rounded-lg border border-white/[0.08] bg-[#1d1c20] p-8',
         className
       )}
     >
       {children}
 
-      <div className="h-40  relative flex items-center overflow-hidden">
+      <div className="relative flex h-40 items-center overflow-hidden">
         <motion.div
-          style={{
-            width: "100%",
-          }}
           animate={
             isMouseOver
-              ? {
-                  opacity: widthPercentage > 0 ? 1 : 0,
-                  clipPath: `inset(0 ${100 - widthPercentage}% 0 0)`,
-                }
-              : {
-                  clipPath: `inset(0 ${100 - widthPercentage}% 0 0)`,
-                }
+              ? { opacity: widthPercentage > 0 ? 1 : 0, clipPath: `inset(0 ${100 - widthPercentage}% 0 0)` }
+              : { clipPath: `inset(0 ${100 - widthPercentage}% 0 0)` }
           }
-          transition={isMouseOver ? { duration: 0 } : { duration: 0.4 }}
-          className="absolute bg-[#1d1c20] z-20  will-change-transform"
+          transition={{ duration: isMouseOver ? 0 : 0.4 }}
+          className="absolute z-20 w-full bg-[#1d1c20] will-change-transform"
         >
           <p
-            style={{
-              textShadow: "4px 4px 15px rgba(0,0,0,0.5)",
-            }}
-            className="text-base sm:text-[3rem] py-10 font-bold text-white bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-300"
+            style={{ textShadow: '4px 4px 15px rgba(0,0,0,0.5)' }}
+            className="bg-gradient-to-b from-white to-neutral-300 bg-clip-text py-10 text-base font-bold text-transparent text-white sm:text-[3rem]"
           >
             {revealText}
           </p>
         </motion.div>
+
         <motion.div
-          animate={{
-            left: `${widthPercentage}%`,
-            rotate: `${rotateDeg}deg`,
-            opacity: widthPercentage > 0 ? 1 : 0,
-          }}
-          transition={isMouseOver ? { duration: 0 } : { duration: 0.4 }}
-          className="h-40 w-[8px] bg-gradient-to-b from-transparent via-neutral-800 to-transparent absolute z-50 will-change-transform"
+          animate={{ left: `${widthPercentage}%`, rotate: `${rotateDeg}deg`, opacity: widthPercentage > 0 ? 1 : 0 }}
+          transition={{ duration: isMouseOver ? 0 : 0.4 }}
+          className="absolute z-50 h-40 w-[8px] bg-gradient-to-b from-transparent via-neutral-800 to-transparent will-change-transform"
         ></motion.div>
 
-        <div className=" overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]">
-          <p className="text-base sm:text-[3rem] py-10 font-bold bg-clip-text text-transparent bg-[#323238]">
-            {text}
-          </p>
-          <MemoizedStars />
+        <div className="overflow-hidden [mask-image:linear-gradient(to_bottom,transparent,white,transparent)]">
+          <p className="bg-[#323238] bg-clip-text py-10 text-base font-bold text-transparent sm:text-[3rem]">{text}</p>
+          <MemoizedStars amount={amount} />
         </div>
       </div>
     </div>
   );
 };
 
-export const TextRevealCardTitle = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => {
-  return (
-    <h2 className={twMerge("text-white text-lg mb-2", className)}>
-      {children}
-    </h2>
-  );
-};
+export const TextRevealCardTitle: AceternityComponent = ({ children, className }) => (
+  <h2 className={cn('mb-2 text-lg text-white', className)}>{children}</h2>
+);
 
-export const TextRevealCardDescription = ({
-  children,
-  className,
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) => {
-  return (
-    <p className={twMerge("text-[#a9a9a9] text-sm", className)}>{children}</p>
-  );
-};
+export const TextRevealCardDescription: AceternityComponent = ({ children, className }) => (
+  <p className={cn('text-sm text-[#a9a9a9]', className)}>{children}</p>
+);
 
-const Stars = () => {
-  const randomMove = () => Math.random() * 4 - 2;
-  const randomOpacity = () => Math.random();
+const Stars: AceternityComponent<{ amount?: number }> = ({ amount = 80 }) => {
   const random = () => Math.random();
+  const randomMove = () => random() * 4 - 2;
+  const randomOpacity = () => random();
+
   return (
     <div className="absolute inset-0">
-      {[...Array(80)].map((_, i) => (
+      {Array.from({ length: amount }).map((_, i) => (
         <motion.span
           key={`star-${i}`}
           animate={{
             top: `calc(${random() * 100}% + ${randomMove()}px)`,
             left: `calc(${random() * 100}% + ${randomMove()}px)`,
             opacity: randomOpacity(),
-            scale: [1, 1.2, 0],
+            scale: [1, 1.2, 0]
           }}
-          transition={{
-            duration: random() * 10 + 20,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-          style={{
-            position: "absolute",
-            top: `${random() * 100}%`,
-            left: `${random() * 100}%`,
-            width: `2px`,
-            height: `2px`,
-            backgroundColor: "white",
-            borderRadius: "50%",
-            zIndex: 1,
-          }}
-          className="inline-block"
+          transition={{ duration: random() * 10 + 20, repeat: Infinity, ease: 'linear' }}
+          className="absolute z-[1] inline-block size-0.5 rounded-[50%] bg-white"
         ></motion.span>
       ))}
     </div>
