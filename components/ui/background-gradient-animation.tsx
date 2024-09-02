@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
+import { useSafari } from '@/hooks';
 
 type BackgroundGradientAnimationProps = {
   start?: string;
@@ -69,10 +70,7 @@ export const BackgroundGradientAnimation: AceternityComponent<BackgroundGradient
     setTgY(event.clientY - rect.top);
   };
 
-  const [isSafari, setIsSafari] = useState(false);
-  useEffect(() => {
-    setIsSafari(/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
-  }, []);
+  const [isSafari] = useSafari();
 
   return (
     <div
