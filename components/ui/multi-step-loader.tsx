@@ -39,7 +39,7 @@ const LoaderCore: AceternityComponent<{
 
       return (
         <motion.div
-          key={index}
+          key={`${loadingState.text}-${index}`}
           className={cn('mb-4 flex gap-2 text-left')}
           initial={{ opacity: 0, y: -(value * 40) }}
           animate={{ opacity, y: -(value * 40) }}
@@ -83,13 +83,13 @@ export const MultiStepLoader: AceternityComponent<{
       return;
     }
     const timeout = setTimeout(() => {
-      setCurrentState((prevState) =>
-        loop
-          ? prevState === loadingStates.length - 1
-            ? 0
-            : prevState + 1
-          : Math.min(prevState + 1, loadingStates.length - 1)
-      );
+      setCurrentState((prevState) => {
+        if (loop) {
+          return prevState === loadingStates.length - 1 ? 0 : prevState + 1;
+        } else {
+          return Math.min(prevState + 1, loadingStates.length - 1);
+        }
+      });
     }, duration);
 
     return () => clearTimeout(timeout);

@@ -1,10 +1,9 @@
 'use client';
 
+import { motion, useMotionValueEvent, useScroll } from 'framer-motion';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useMotionValueEvent, useScroll } from 'framer-motion';
 
 import { cn } from '@/lib/utils';
-import { motion } from 'framer-motion';
 
 export const StickyScroll: AceternityComponent<{
   content: StickyScrollItem[];

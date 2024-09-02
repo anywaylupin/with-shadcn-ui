@@ -49,7 +49,7 @@ export const TextRevealCard: AceternityComponent<{
       e.preventDefault();
       if (!ref.current) return;
 
-      const clientX = e.touches[0]!.clientX;
+      const clientX = e.touches[0].clientX;
       const relativeX = clientX - left;
       setWidthPercentage((relativeX / localWidth) * 100);
     },
@@ -125,7 +125,7 @@ const Stars: AceternityComponent<{ amount?: number }> = ({ amount = 80 }) => {
     <div className="absolute inset-0">
       {Array.from({ length: amount }).map((_, i) => (
         <motion.span
-          key={`star-${i}`}
+          key={`star-${amount - i}`}
           animate={{
             top: `calc(${random() * 100}% + ${randomMove()}px)`,
             left: `calc(${random() * 100}% + ${randomMove()}px)`,

@@ -40,7 +40,7 @@ export const LinkPreview: AceternityComponent<LinkPreviewProps> = ({
     src = imageSrc;
   }
 
-  const [isOpen, setOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => setIsMounted(true), []);
@@ -66,7 +66,7 @@ export const LinkPreview: AceternityComponent<LinkPreviewProps> = ({
         </div>
       )}
 
-      <HoverCardPrimitive.Root openDelay={50} closeDelay={100} onOpenChange={(open) => setOpen(open)}>
+      <HoverCardPrimitive.Root openDelay={50} closeDelay={100} onOpenChange={(open) => setIsOpen(open)}>
         <HoverCardPrimitive.Trigger
           onMouseMove={handleMouseMove}
           className={cn('text-black dark:text-white', className)}
