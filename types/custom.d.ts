@@ -6,6 +6,8 @@ declare type Numberish = React.Key;
 
 declare type DirectionSide = 'top' | 'bottom' | 'left' | 'right';
 
+declare type MinMaxValue = { min?: number; max?: number };
+
 declare type StringNode = JSX.Element | React.ReactNode | string;
 
 declare type StateContextType<S = boolean> = [S, React.Dispatch<React.SetStateAction<S>>];
