@@ -1,8 +1,9 @@
 'use client';
-import React from 'react';
+
 import { motion, useAnimationFrame, useMotionTemplate, useMotionValue, useTransform } from 'framer-motion';
-import { useRef } from 'react';
+
 import { cn } from '@/lib/utils';
+import { useRef } from 'react';
 
 export const Button: AceternityComponent<{
   borderRadius?: string;
