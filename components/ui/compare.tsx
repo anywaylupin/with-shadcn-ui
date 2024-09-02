@@ -8,19 +8,7 @@ import Image from 'next/image';
 import { SparklesCore } from '@/components/ui/sparkles';
 import { cn } from '@/lib/utils';
 
-type CompareImageProps = { image?: string; className?: string };
-
-type CompareProps = PropsWithClass<{
-  first?: CompareImageProps;
-  second?: CompareImageProps;
-  initialSliderPercentage?: number;
-  mode?: 'hover' | 'drag';
-  showHandlebar?: boolean;
-  autoplay?: boolean;
-  autoplayDuration?: number;
-}>;
-
-export const Compare = ({
+export const Compare: AceternityComponent<CompareProps> = ({
   first,
   second,
   className,
@@ -29,7 +17,7 @@ export const Compare = ({
   showHandlebar = true,
   autoplay = false,
   autoplayDuration = 5000
-}: CompareProps) => {
+}) => {
   const [sliderXPercent, setSliderXPercent] = useState(initialSliderPercentage);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -216,3 +204,15 @@ export const Compare = ({
 };
 
 const MemoizedSparklesCore = memo(SparklesCore);
+
+type CompareImageProps = { image?: string; className?: string };
+
+type CompareProps = {
+  first?: CompareImageProps;
+  second?: CompareImageProps;
+  initialSliderPercentage?: number;
+  mode?: 'hover' | 'drag';
+  showHandlebar?: boolean;
+  autoplay?: boolean;
+  autoplayDuration?: number;
+};

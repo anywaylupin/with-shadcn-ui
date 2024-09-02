@@ -5,7 +5,14 @@ import { useCallback, useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-export const ImagesSlider = ({
+export const ImagesSlider: AceternityComponent<{
+  images: string[];
+  overlay?: React.ReactNode;
+  overlayClassName?: string;
+  autoplay?: boolean;
+  duration?: number;
+  direction?: 'up' | 'down';
+}> = ({
   images,
   children,
   overlay = true,
@@ -14,14 +21,7 @@ export const ImagesSlider = ({
   autoplay = true,
   duration = 1,
   direction = 'up'
-}: PropsWithClass<{
-  images: string[];
-  overlay?: React.ReactNode;
-  overlayClassName?: string;
-  autoplay?: boolean;
-  duration?: number;
-  direction?: 'up' | 'down';
-}>) => {
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -99,8 +99,10 @@ export const ImagesSlider = ({
 
   return (
     <div
-      className={cn('relative flex h-full w-full items-center justify-center overflow-hidden', className)}
-      style={{ perspective: '1000px' }}
+      className={cn(
+        'relative flex h-full w-full items-center justify-center overflow-hidden [perspective:1000px]',
+        className
+      )}
     >
       {areImagesLoaded && children}
       {areImagesLoaded && overlay && <div className={cn('absolute inset-0 z-40 bg-black/60', overlayClassName)} />}

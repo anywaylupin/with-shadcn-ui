@@ -3,74 +3,62 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import { IconArrowNarrowLeft, IconArrowNarrowRight, IconX } from '@tabler/icons-react';
 import Image, { ImageProps } from 'next/image';
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { useOutsideClick } from '@/hooks';
 
-export type AppleCardType = { src: string; title: string; category: string; content: React.ReactNode };
-
-export type AppleCarouselProps = PropsWithClass<{ items: JSX.Element[]; initialScroll?: number }>;
-
-export const AppleCarouselContext = createContext<{ currentIndex: number; onCardClose: (index: number) => void }>({
+export const CarouselContext = createContext<{ currentIndex: number; onCardClose: (index: number) => void }>({
   currentIndex: 0,
   onCardClose: () => {}
 });
 
-export const AppleCarousel = ({ items, initialScroll = 0 }: AppleCarouselProps) => {
-  const carouselRef = useRef<HTMLDivElement>(null);
+export const Carousel: AceternityComponent<CarouselProps> = ({ items, initialScroll = 0 }) => {
+  const ref = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const scrollLeft = useCallback(() => ref.current?.scrollBy({ left: -300, behavior: 'smooth' }), []);
+  const scrollRight = useCallback(() => ref.current?.scrollBy({ left: 300, behavior: 'smooth' }), []);
+
+  const checkScrollability = useCallback(() => {
+    if (!ref.current) return;
+
+    const { scrollLeft, scrollWidth, clientWidth } = ref.current;
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth);
+  }, []);
+
+  const handleCardClose = useCallback((index: number) => {
+    if (!ref.current) return;
+
+    const isMobile = window && window.innerWidth < 768;
+    const cardWidth = isMobile ? 230 : 384; // (md:w-96)
+    const gap = isMobile ? 4 : 8;
+    const scrollPosition = (cardWidth + gap) * (index + 1);
+    ref.current.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+    setCurrentIndex(index);
+  }, []);
+
+  const providerValue = useMemo(
+    () => ({ onCardClose: handleCardClose, currentIndex }),
+    [currentIndex, handleCardClose]
+  );
+
   useEffect(() => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollLeft = initialScroll;
-      checkScrollability();
-    }
-  }, [initialScroll]);
+    if (!ref.current) return;
 
-  const checkScrollability = () => {
-    if (carouselRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
-      setCanScrollLeft(scrollLeft > 0);
-      setCanScrollRight(scrollLeft < scrollWidth - clientWidth);
-    }
-  };
-
-  const scrollLeft = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: -300, behavior: 'smooth' });
-    }
-  };
-
-  const scrollRight = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: 300, behavior: 'smooth' });
-    }
-  };
-
-  const handleCardClose = (index: number) => {
-    if (carouselRef.current) {
-      const cardWidth = isMobile() ? 230 : 384; // (md:w-96)
-      const gap = isMobile() ? 4 : 8;
-      const scrollPosition = (cardWidth + gap) * (index + 1);
-      carouselRef.current.scrollTo({
-        left: scrollPosition,
-        behavior: 'smooth'
-      });
-      setCurrentIndex(index);
-    }
-  };
-
-  const isMobile = () => window && window.innerWidth < 768;
+    ref.current.scrollLeft = initialScroll;
+    checkScrollability();
+  }, [checkScrollability, initialScroll]);
 
   return (
-    <AppleCarouselContext.Provider value={{ onCardClose: handleCardClose, currentIndex }}>
+    <CarouselContext.Provider value={providerValue}>
       <div className="relative w-full">
         <div
-          className="flex w-full overflow-x-scroll overscroll-x-auto scroll-smooth py-10 [scrollbar-width:none] md:py-20"
-          ref={carouselRef}
+          className="scrollbar-none flex w-full overflow-x-scroll overscroll-x-auto scroll-smooth py-10 md:py-20"
+          ref={ref}
           onScroll={checkScrollability}
         >
           <div className={cn('absolute right-0 z-[1000] h-auto w-[5%] overflow-hidden bg-gradient-to-l')}></div>
@@ -89,7 +77,7 @@ export const AppleCarousel = ({ items, initialScroll = 0 }: AppleCarouselProps) 
                   y: 0,
                   transition: { duration: 0.5, delay: 0.2 * index, ease: 'easeOut', once: true }
                 }}
-                key={'card' + index}
+                key={`${item.key ?? 'card'}-${index}`}
                 className="rounded-3xl last:pr-[5%] md:last:pr-[33%]"
               >
                 {item}
@@ -114,26 +102,14 @@ export const AppleCarousel = ({ items, initialScroll = 0 }: AppleCarouselProps) 
           </button>
         </div>
       </div>
-    </AppleCarouselContext.Provider>
+    </CarouselContext.Provider>
   );
 };
 
-export const AppleCard = ({
-  card,
-  index,
-  layout = false
-}: {
-  card: AppleCardType;
-  index: number;
-  layout?: boolean;
-}) => {
+export const Card = ({ card, index, layout = false }: { card: CardType; index: number; layout?: boolean }) => {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { onCardClose } = useContext(AppleCarouselContext);
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
+  const { onCardClose } = useContext(CarouselContext);
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -143,17 +119,11 @@ export const AppleCard = ({
   useOutsideClick(containerRef, () => handleClose());
 
   useEffect(() => {
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
-        handleClose();
-      }
-    }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') handleClose();
+    };
 
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
+    document.body.style.overflow = open ? 'hidden' : 'auto';
 
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
@@ -201,9 +171,10 @@ export const AppleCard = ({
           </div>
         )}
       </AnimatePresence>
+
       <motion.button
         layoutId={layout ? `card-${card.title}` : undefined}
-        onClick={handleOpen}
+        onClick={() => setOpen(true)}
         className="relative z-10 flex h-80 w-56 flex-col items-start justify-start overflow-hidden rounded-3xl bg-gray-100 dark:bg-neutral-900 md:h-[40rem] md:w-96"
       >
         <div className="pointer-events-none absolute inset-x-0 top-0 z-30 h-full bg-gradient-to-b from-black/50 via-transparent to-transparent" />
@@ -216,7 +187,7 @@ export const AppleCard = ({
           </motion.p>
           <motion.p
             layoutId={layout ? `title-${card.title}` : undefined}
-            className="mt-2 max-w-xs text-left font-sans text-xl font-semibold text-white [text-wrap:balance] md:text-3xl"
+            className="mt-2 max-w-xs text-balance text-left font-sans text-xl font-semibold text-white md:text-3xl"
           >
             {card.title}
           </motion.p>
@@ -228,11 +199,11 @@ export const AppleCard = ({
 };
 
 export const BlurImage = ({ height, width, src, className, alt, ...rest }: ImageProps) => {
-  const [isLoading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   return (
     <Image
-      className={cn('transition duration-300', isLoading ? 'blur-sm' : 'blur-0', className)}
+      className={cn('transition duration-300', loading ? 'blur-sm' : 'blur-0', className)}
       onLoad={() => setLoading(false)}
       src={src}
       width={width}
@@ -240,8 +211,12 @@ export const BlurImage = ({ height, width, src, className, alt, ...rest }: Image
       loading="lazy"
       decoding="async"
       blurDataURL={typeof src === 'string' ? src : undefined}
-      alt={alt ? alt : 'Background of a beautiful view'}
+      alt={alt}
       {...rest}
     />
   );
 };
+
+export type CardType = { src: string; title: string; category: string; content: React.ReactNode };
+
+export type CarouselProps = { items: JSX.Element[]; initialScroll?: number };

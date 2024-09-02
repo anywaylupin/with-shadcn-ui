@@ -5,20 +5,21 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-export const ContainerScroll = ({ title, children, className }: PropsWithClass<{ title: StringNode }>) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: containerRef });
+export const ContainerScroll: AceternityComponent<{ title: StringNode }> = ({
+  title,
+  children,
+  className,
+  containerClassName
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref });
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    return () => {
-      window.removeEventListener('resize', checkMobile);
-    };
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   const scaleDimensions = useCallback(() => (isMobile ? [0.7, 0.9] : [1.05, 1]), [isMobile]);
@@ -28,8 +29,8 @@ export const ContainerScroll = ({ title, children, className }: PropsWithClass<{
 
   return (
     <div
-      className={cn('relative flex h-[60rem] items-center justify-center p-2 md:h-[80rem] md:p-20', className)}
-      ref={containerRef}
+      ref={ref}
+      className={cn('relative flex h-[60rem] items-center justify-center p-2 md:h-[80rem] md:p-20', containerClassName)}
     >
       <div className="relative w-full py-10 md:py-40" style={{ perspective: '1000px' }}>
         <motion.div style={{ translateY }} className="div mx-auto max-w-5xl text-center">
@@ -37,13 +38,11 @@ export const ContainerScroll = ({ title, children, className }: PropsWithClass<{
         </motion.div>
 
         <motion.div
-          style={{
-            rotateX,
-            scale,
-            boxShadow:
-              '0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003'
-          }}
-          className="mx-auto -mt-12 h-[30rem] w-full max-w-5xl rounded-[30px] border-4 border-[#6C6C6C] bg-[#222222] p-2 shadow-2xl md:h-[40rem] md:p-6"
+          style={{ rotateX, scale }}
+          className={cn(
+            'aceternity-container-scroll mx-auto -mt-12 h-[30rem] w-full max-w-5xl p-2 md:h-[40rem] md:p-6',
+            className
+          )}
         >
           <div className="h-full w-full overflow-hidden rounded-2xl bg-gray-100 dark:bg-zinc-900 md:rounded-2xl md:p-4">
             {children}

@@ -1,28 +1,20 @@
 'use client';
 
 import { AnimatePresence, MotionValue, motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 import { IconLayoutNavbarCollapse } from '@tabler/icons-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 
-type FloatingDockItem = { title: string; icon: React.ReactNode; href: string };
-
-type FloatingDockProps = PropsWithClass<{
-  items: FloatingDockItem[];
-  desktopClassName?: string;
-  mobileClassName?: string;
-}>;
-
-export const FloatingDock = ({ items, desktopClassName, mobileClassName }: FloatingDockProps) => (
+export const FloatingDock: AceternityComponent<FloatingDockProps> = ({ items, desktopClassName, mobileClassName }) => (
   <>
     <FloatingDockDesktop items={items} className={desktopClassName} />
     <FloatingDockMobile items={items} className={mobileClassName} />
   </>
 );
 
-const FloatingDockMobile = ({ items, className }: PropsWithClass<{ items: FloatingDockItem[] }>) => {
+const FloatingDockMobile: AceternityComponent<{ items: FloatingDockItem[] }> = ({ items, className }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -32,7 +24,7 @@ const FloatingDockMobile = ({ items, className }: PropsWithClass<{ items: Floati
           <motion.div layoutId="nav" className="absolute inset-x-0 bottom-full mb-2 flex flex-col gap-2">
             {items.map((item, idx) => (
               <motion.div
-                key={item.title}
+                key={item.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10, transition: { delay: idx * 0.05 } }}
@@ -130,4 +122,12 @@ const IconContainer = ({ mouseX, title, icon, href }: IconContainer) => {
       </motion.div>
     </Link>
   );
+};
+
+type FloatingDockItem = {id: React.Key, title: string; icon: React.ReactNode; href: string };
+
+type FloatingDockProps = {
+  items: FloatingDockItem[];
+  desktopClassName?: string;
+  mobileClassName?: string;
 };

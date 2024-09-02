@@ -5,9 +5,7 @@ import { useCallback, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
-export type LayoutGridItem = { id: number; content: StringNode; className: string; thumbnail: string };
-
-export const LayoutGrid = ({ items }: { items: LayoutGridItem[] }) => {
+export const LayoutGrid: AceternityComponent<{ items: LayoutGridItem[] }> = ({ items }) => {
   const [selected, setSelected] = useState<LayoutGridItem | null>(null);
   const [lastSelected, setLastSelected] = useState<LayoutGridItem | null>(null);
 
@@ -83,3 +81,5 @@ const SelectedCard = ({ selected }: { selected: LayoutGridItem | null }) => (
     </motion.div>
   </div>
 );
+
+export type LayoutGridItem = { id: number; content: StringNode; className: string; thumbnail: string };

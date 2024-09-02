@@ -9,62 +9,15 @@ import { OrbitControls } from '@react-three/drei';
 import ThreeGlobe from 'three-globe';
 import countries from '@/data/globe.json';
 
-declare module '@react-three/fiber' {
-  interface ThreeElements {
-    threeGlobe: Object3DNode<ThreeGlobe, typeof ThreeGlobe>;
-  }
-}
-
 extend({ ThreeGlobe });
 
 const RING_PROPAGATION_SPEED = 3;
 const aspect = 1.2;
 const cameraZ = 300;
 
-type Position = {
-  order: number;
-  startLat: number;
-  startLng: number;
-  endLat: number;
-  endLng: number;
-  arcAlt: number;
-  color: string;
-};
-
-export type GlobeConfig = {
-  pointSize?: number;
-  globeColor?: string;
-  showAtmosphere?: boolean;
-  atmosphereColor?: string;
-  atmosphereAltitude?: number;
-  emissive?: string;
-  emissiveIntensity?: number;
-  shininess?: number;
-  polygonColor?: string;
-  ambientLight?: string;
-  directionalLeftLight?: string;
-  directionalTopLight?: string;
-  pointLight?: string;
-  arcTime?: number;
-  arcLength?: number;
-  rings?: number;
-  maxRings?: number;
-  initialPosition?: {
-    lat: number;
-    lng: number;
-  };
-  autoRotate?: boolean;
-  autoRotateSpeed?: number;
-};
-
-interface WorldProps {
-  globeConfig: GlobeConfig;
-  data: Position[];
-}
-
 let numbersOfRings = [0];
 
-export const Globe = ({ globeConfig, data }: WorldProps) => {
+export const Globe: AceternityComponent<WorldProps> = ({ globeConfig, data }) => {
   const [globeData, setGlobeData] = useState<
     | {
         size: number;
@@ -100,7 +53,7 @@ export const Globe = ({ globeConfig, data }: WorldProps) => {
       _buildData();
       _buildMaterial();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [globeRef.current]);
 
   const _buildMaterial = () => {
@@ -162,7 +115,7 @@ export const Globe = ({ globeConfig, data }: WorldProps) => {
         });
       startAnimation();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [globeData]);
 
   const startAnimation = () => {
@@ -214,7 +167,7 @@ export const Globe = ({ globeConfig, data }: WorldProps) => {
     return () => {
       clearInterval(interval);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [globeRef.current, globeData]);
 
   return (
@@ -231,13 +184,13 @@ export const WebGLRendererConfig = () => {
     gl.setPixelRatio(window.devicePixelRatio);
     gl.setSize(size.width, size.height);
     gl.setClearColor(0xffaaff, 0);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return null;
 };
 
-export const World = (props: WorldProps) => {
+export const World: AceternityComponent<WorldProps> = (props) => {
   const { globeConfig } = props;
   const scene = new Scene();
   scene.fog = new Fog(0xffffff, 400, 2000);
@@ -263,3 +216,50 @@ export const World = (props: WorldProps) => {
     </Canvas>
   );
 };
+
+declare module '@react-three/fiber' {
+  interface ThreeElements {
+    threeGlobe: Object3DNode<ThreeGlobe, typeof ThreeGlobe>;
+  }
+}
+
+type Position = {
+  order: number;
+  startLat: number;
+  startLng: number;
+  endLat: number;
+  endLng: number;
+  arcAlt: number;
+  color: string;
+};
+
+export type GlobeConfig = {
+  pointSize?: number;
+  globeColor?: string;
+  showAtmosphere?: boolean;
+  atmosphereColor?: string;
+  atmosphereAltitude?: number;
+  emissive?: string;
+  emissiveIntensity?: number;
+  shininess?: number;
+  polygonColor?: string;
+  ambientLight?: string;
+  directionalLeftLight?: string;
+  directionalTopLight?: string;
+  pointLight?: string;
+  arcTime?: number;
+  arcLength?: number;
+  rings?: number;
+  maxRings?: number;
+  initialPosition?: {
+    lat: number;
+    lng: number;
+  };
+  autoRotate?: boolean;
+  autoRotateSpeed?: number;
+};
+
+interface WorldProps {
+  globeConfig: GlobeConfig;
+  data: Position[];
+}

@@ -4,9 +4,9 @@ import { CSSProperties, useRef } from 'react';
 
 import { cn } from '@/lib/utils';
 
-export const GlareCard = ({ children, className }: PropsWithClass) => {
+export const GlareCard: AceternityComponent = ({ children, className }) => {
   const isPointerInside = useRef(false);
-  const refElement = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const state = useRef({ glare: { x: 50, y: 50 }, background: { x: 50, y: 50 }, rotate: { x: 0, y: 0 } });
 
   const containerStyle = {
@@ -38,20 +38,19 @@ export const GlareCard = ({ children, className }: PropsWithClass) => {
   };
 
   const updateStyles = () => {
-    if (refElement.current) {
-      const { background, rotate, glare } = state.current;
-      refElement.current.style.setProperty('--m-x', `${glare.x}%`);
-      refElement.current.style.setProperty('--m-y', `${glare.y}%`);
-      refElement.current.style.setProperty('--r-x', `${rotate.x}deg`);
-      refElement.current.style.setProperty('--r-y', `${rotate.y}deg`);
-      refElement.current.style.setProperty('--bg-x', `${background.x}%`);
-      refElement.current.style.setProperty('--bg-y', `${background.y}%`);
-    }
+    if (!ref.current) return;
+    const { background, rotate, glare } = state.current;
+    ref.current.style.setProperty('--m-x', `${glare.x}%`);
+    ref.current.style.setProperty('--m-y', `${glare.y}%`);
+    ref.current.style.setProperty('--r-x', `${rotate.x}deg`);
+    ref.current.style.setProperty('--r-y', `${rotate.y}deg`);
+    ref.current.style.setProperty('--bg-x', `${background.x}%`);
+    ref.current.style.setProperty('--bg-y', `${background.y}%`);
   };
 
   return (
     <div
-      ref={refElement}
+      ref={ref}
       style={containerStyle}
       className="duration-[var(--duration)] ease-[var(--easing)] delay-[var(--delay)] relative isolate w-[320px] transition-transform will-change-transform [aspect-ratio:17/21] [contain:layout_style] [perspective:600px]"
       onPointerMove={(event) => {
@@ -75,21 +74,17 @@ export const GlareCard = ({ children, className }: PropsWithClass) => {
       }}
       onPointerEnter={() => {
         isPointerInside.current = true;
-        if (refElement.current) {
-          setTimeout(() => {
-            if (isPointerInside.current) {
-              refElement.current?.style.setProperty('--duration', '0s');
-            }
-          }, 300);
-        }
+        if (!ref.current) return;
+
+        setTimeout(() => {
+          ref.current?.style.setProperty('--duration', '0s');
+        }, 300);
       }}
       onPointerLeave={() => {
         isPointerInside.current = false;
-        if (refElement.current) {
-          refElement.current.style.removeProperty('--duration');
-          refElement.current?.style.setProperty('--r-x', `0deg`);
-          refElement.current?.style.setProperty('--r-y', `0deg`);
-        }
+        ref.current?.style.removeProperty('--duration');
+        ref.current?.style.setProperty('--r-x', `0deg`);
+        ref.current?.style.setProperty('--r-y', `0deg`);
       }}
     >
       <div className="duration-[var(--duration)] ease-[var(--easing)] delay-[var(--delay)] grid h-full origin-center overflow-hidden rounded-[var(--radius)] border border-slate-800 transition-transform will-change-transform [transform:rotateY(var(--r-x))_rotateX(var(--r-y))] hover:filter-none hover:[--duration:200ms] hover:[--easing:linear] hover:[--opacity:0.6]">

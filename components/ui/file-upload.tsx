@@ -4,19 +4,12 @@ import { useCallback, useRef, useState } from 'react';
 import { IconUpload } from '@tabler/icons-react';
 import { motion } from 'framer-motion';
 
-type FileUploadProps = {
-  title?: string;
-  subtitle?: string;
-  onChange?: (files: File[]) => void;
-  onDropRejected?: DropzoneOptions['onDropRejected'];
-};
-
-export const FileUpload = ({
+export const FileUpload: AceternityComponent<FileUploadProps> = ({
   title = 'File Upload',
   subtitle = 'Drag or drop your files here or click to upload',
   onChange,
   onDropRejected = (error) => console.error(error)
-}: FileUploadProps) => {
+}) => {
   const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -165,3 +158,11 @@ export const GridPattern = ({ rows = 11, cols = 41 }: { rows?: number; cols?: nu
     )}
   </div>
 );
+
+
+type FileUploadProps = {
+  title?: string;
+  subtitle?: string;
+  onChange?: (files: File[]) => void;
+  onDropRejected?: DropzoneOptions['onDropRejected'];
+};

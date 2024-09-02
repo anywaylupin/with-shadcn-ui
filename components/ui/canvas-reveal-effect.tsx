@@ -7,27 +7,14 @@ import { useCallback, useMemo, useRef } from 'react';
 
 import { cn } from '@/lib/utils';
 
-type ShaderUniforms = { [key: string]: { value: number[] | number[][] | number; type: string } };
-type ShaderProps = { source: string; maxFps?: number; uniforms: ShaderUniforms };
-type ShaderMaterialProps = ShaderProps & { hovered?: boolean };
-
-type CanvasRevealEffectProps = PropsWithClass<{
-  /** 0.1 - slower | 1.0 - faster */
-  animationSpeed?: number;
-  opacities?: number[];
-  colors?: [number, number, number][];
-  dotSize?: number;
-  showGradient?: boolean;
-}>;
-
-export const CanvasRevealEffect = ({
+export const CanvasRevealEffect: AceternityComponent<CanvasRevealEffectProps> = ({
   animationSpeed = 0.4,
   opacities = [0.3, 0.3, 0.3, 0.5, 0.5, 0.5, 0.8, 0.8, 0.8, 1],
   colors = [[0, 255, 255]],
   containerClassName,
   dotSize,
   showGradient = true
-}: CanvasRevealEffectProps) => (
+}) => (
   <div className={cn('relative h-full w-full bg-white', containerClassName)}>
     <div className="h-full w-full">
       <DotMatrix
@@ -47,23 +34,14 @@ export const CanvasRevealEffect = ({
   </div>
 );
 
-type DotMatrixProps = PropsWithClass<{
-  colors?: number[][];
-  opacities?: number[];
-  totalSize?: number;
-  dotSize?: number;
-  shader?: string;
-  center?: ('x' | 'y')[];
-}>;
-
-const DotMatrix = ({
+const DotMatrix: AceternityComponent<DotMatrixProps> = ({
   colors = [[0, 0, 0]],
   opacities = [0.04, 0.04, 0.04, 0.04, 0.04, 0.08, 0.08, 0.08, 0.08, 0.14],
   totalSize = 4,
   dotSize = 2,
   shader = '',
   center = ['x', 'y']
-}: DotMatrixProps) => {
+}) => {
   const uniforms = useMemo(() => {
     let colorsArray = [colors[0], colors[0], colors[0], colors[0], colors[0], colors[0]];
     if (colors.length === 2) {
@@ -149,9 +127,8 @@ const ShaderMaterial = ({ source, uniforms, maxFps = 60 }: ShaderMaterialProps) 
   useFrame(({ clock }) => {
     if (!ref.current) return;
     const timestamp = clock.getElapsedTime();
-    if (timestamp - lastFrameTime < 1 / maxFps) {
-      return;
-    }
+    if (timestamp - lastFrameTime < 1 / maxFps) return;
+
     lastFrameTime = timestamp;
 
     const material: any = ref.current.material;
@@ -243,3 +220,25 @@ const Shader = ({ source, uniforms, maxFps = 60 }: ShaderProps) => (
     <ShaderMaterial source={source} uniforms={uniforms} maxFps={maxFps} />
   </Canvas>
 );
+
+type ShaderUniforms = { [key: string]: { value: number[] | number[][] | number; type: string } };
+type ShaderProps = { source: string; maxFps?: number; uniforms: ShaderUniforms };
+type ShaderMaterialProps = ShaderProps & { hovered?: boolean };
+
+type CanvasRevealEffectProps = {
+  /** 0.1 - slower | 1.0 - faster */
+  animationSpeed?: number;
+  opacities?: number[];
+  colors?: [number, number, number][];
+  dotSize?: number;
+  showGradient?: boolean;
+};
+
+type DotMatrixProps = {
+  colors?: number[][];
+  opacities?: number[];
+  totalSize?: number;
+  dotSize?: number;
+  shader?: string;
+  center?: ('x' | 'y')[];
+};

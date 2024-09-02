@@ -6,7 +6,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { SparklesCore } from '@/components/ui/sparkles';
 import { cn } from '@/lib/utils';
 
-export const Cover = ({ children, className }: PropsWithClass) => {
+export const Cover: AceternityComponent = ({ children, className }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const [hovered, setHovered] = useState(false);

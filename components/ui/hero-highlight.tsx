@@ -3,9 +3,9 @@
 import { motion, useMotionTemplate, useMotionValue } from 'framer-motion';
 
 import { cn } from '@/lib/utils';
-import  { useCallback } from 'react';
+import { useCallback } from 'react';
 
-export const HeroHighlight = ({ children, className, containerClassName }: PropsWithClass) => {
+export const HeroHighlight: AceternityComponent = ({ children, className, containerClassName }) => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
@@ -31,9 +31,9 @@ export const HeroHighlight = ({ children, className, containerClassName }: Props
       )}
       onMouseMove={handleMouseMove}
     >
-      <div className="bg-dot-thick-neutral-300 dark:bg-dot-thick-neutral-800 pointer-events-none absolute inset-0" />
+      <div className="pointer-events-none absolute inset-0 bg-dot-thick-neutral-300 dark:bg-dot-thick-neutral-800" />
       <motion.div
-        className="bg-dot-thick-indigo-500 dark:bg-dot-thick-indigo-500 pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100"
+        className="pointer-events-none absolute inset-0 opacity-0 transition duration-300 bg-dot-thick-indigo-500 group-hover:opacity-100 dark:bg-dot-thick-indigo-500"
         style={style}
       />
 
@@ -42,7 +42,7 @@ export const HeroHighlight = ({ children, className, containerClassName }: Props
   );
 };
 
-export const Highlight = ({ children, className }: PropsWithClass) => (
+export const Highlight: AceternityComponent = ({ children, className }) => (
   <motion.span
     initial={{ backgroundSize: '0% 100%' }}
     animate={{ backgroundSize: '100% 100%' }}

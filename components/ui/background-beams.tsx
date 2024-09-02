@@ -1,10 +1,11 @@
 'use client';
 
+import React, { memo } from 'react';
+
 import { cn } from '@/lib/utils';
-import { memo } from 'react';
 import { motion } from 'framer-motion';
 
-export const BackgroundBeams = memo(function BackgroundBeams({ className }: PropsWithClass) {
+export const BackgroundBeams = memo<React.HTMLProps<HTMLDivElement>>(function BackgroundBeams({ className, ...rest }) {
   const paths = [
     'M-380 -189C-380 -189 -312 216 152 343C616 470 684 875 684 875',
     'M-373 -197C-373 -197 -305 208 159 335C623 462 691 867 691 867',
@@ -64,6 +65,7 @@ export const BackgroundBeams = memo(function BackgroundBeams({ className }: Prop
         'absolute inset-0 flex h-full w-full items-center justify-center [mask-repeat:no-repeat] [mask-size:40px]',
         className
       )}
+      {...rest}
     >
       <svg
         className="pointer-events-none absolute z-0 h-full w-full"
@@ -82,7 +84,7 @@ export const BackgroundBeams = memo(function BackgroundBeams({ className }: Prop
 
         {paths.map((path, index) => (
           <motion.path
-            key={`path-` + index}
+            key={`gradient-${path}-${index}`}
             d={path}
             stroke={`url(#linearGradient-${index})`}
             strokeOpacity="0.4"
@@ -93,7 +95,7 @@ export const BackgroundBeams = memo(function BackgroundBeams({ className }: Prop
           {paths.map((_path, index) => (
             <motion.linearGradient
               id={`linearGradient-${index}`}
-              key={`gradient-${index}`}
+              key={`gradient-${_path}-${index}`}
               initial={{ x1: '0%', x2: '0%', y1: '0%', y2: '0%' }}
               animate={{
                 x1: ['0%', '100%'],

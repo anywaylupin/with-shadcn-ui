@@ -9,6 +9,29 @@ export const AddVariablesForColors = plugin(({ addBase, theme }) => {
   addBase({ ':root': newVars });
 });
 
+export const AuroraBackground = plugin(({ addComponents }) => {
+  addComponents({
+    '.bg-aurora': {
+      '--aurora':
+        'repeating-linear-gradient(100deg,var(--blue-500) 10%,var(--indigo-300) 15%,var(--blue-300) 20%,var(--violet-200) 25%,var(--blue-400) 30%)',
+      '--dark-gradient':
+        'repeating-linear-gradient(100deg,var(--black) 0%,var(--black) 7%,var(--transparent) 10%,var(--transparent) 12%,var(--black) 16%)',
+      '--white-gradient':
+        'repeating-linear-gradient(100deg,var(--white) 0%,var(--white) 7%,var(--transparent) 10%,var(--transparent) 12%,var(--white) 16%)',
+      backgroundImage: 'var(--white-gradient),var(--aurora)',
+      backgroundPosition: '50% 50%,50% 50%',
+      backgroundSize: '300%, 200%',
+      maskImage: 'radial-gradient(ellipse at 100% 0%,black 10%,var(--transparent) 70%)'
+    },
+    '.bg-aurora::after': {
+      content: '""',
+      backgroundAttachment: 'fixed',
+      backgroundImage: 'var(--white-gradient),var(--aurora)',
+      backgroundSize: '200%, 100%'
+    }
+  });
+});
+
 /**
  * @link https://ui.aceternity.com/components/grid-and-dot-backgrounds
  */

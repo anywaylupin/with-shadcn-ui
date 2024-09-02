@@ -5,15 +5,12 @@ import { MotionValue, motion } from 'framer-motion';
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-type GoogleGeminiEffect = PropsWithClass<{ pathLengths: MotionValue[]; title?: StringNode; description?: StringNode }>;
-
-export const GoogleGeminiEffect = ({
+export const GoogleGeminiEffect: AceternityComponent<GoogleGeminiEffectProps> = ({
   pathLengths,
   title = 'Build with Aceternity UI',
-  description = `Scroll this component and see the bottom SVG come to life wow this
-        works!`,
+  description = `Scroll this component and see the bottom SVG come to life wow this works!`,
   className
-}: GoogleGeminiEffect) => {
+}) => {
   const transition = { duration: 0, ease: 'linear' };
 
   return (
@@ -132,3 +129,5 @@ export const GoogleGeminiEffect = ({
     </div>
   );
 };
+
+type GoogleGeminiEffectProps = { pathLengths: MotionValue[]; title?: StringNode; description?: StringNode };

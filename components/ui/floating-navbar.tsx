@@ -6,11 +6,8 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
-type FloatingNavProps = PropsWithClass<{ items: { name: string; link: string; icon?: JSX.Element }[] }>;
-
-export const FloatingNav = ({ items, className }: FloatingNavProps) => {
+export const FloatingNav: AceternityComponent<{ items: FloatingNavItem[] }> = ({ items, className }) => {
   const { scrollYProgress } = useScroll();
-
   const [visible, setVisible] = useState(false);
 
   useMotionValueEvent(scrollYProgress, 'change', (current) => {
@@ -56,3 +53,5 @@ export const FloatingNav = ({ items, className }: FloatingNavProps) => {
     </AnimatePresence>
   );
 };
+
+type FloatingNavItem = { name: string; link: string; icon?: JSX.Element };

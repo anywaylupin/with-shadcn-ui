@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
-export const LampContainer = ({ children, className }: PropsWithClass) => (
+export const LampContainer: AceternityComponent = ({ children, className }) => (
   <div
     className={cn(
       'relative z-0 flex min-h-screen w-full flex-col items-center justify-center overflow-hidden rounded-md bg-slate-950',

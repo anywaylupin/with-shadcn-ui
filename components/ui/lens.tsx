@@ -5,14 +5,6 @@ import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-type LensProps = {
-  zoomFactor?: number;
-  lensSize: number;
-  position: Point;
-  isStatic?: boolean;
-  onHovered?: (hovered: boolean) => void;
-};
-
 export const Lens: AceternityComponent<Partial<LensProps>> = ({
   children,
   zoomFactor = 1.5,
@@ -83,4 +75,12 @@ const Lenses: AceternityComponent<LensProps> = ({ children, zoomFactor, lensSize
       </motion.div>
     </div>
   );
+};
+
+type LensProps = {
+  zoomFactor?: number;
+  lensSize: number;
+  position: Point;
+  isStatic?: boolean;
+  onHovered?: (hovered: boolean) => void;
 };

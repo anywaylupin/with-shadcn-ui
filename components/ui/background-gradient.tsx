@@ -1,29 +1,27 @@
+import { useCallback, useMemo } from 'react';
+
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
-export type BackgroundGradientProps = PropsWithClass<{ animate?: boolean; colors?: string[] }>;
-
-const generateGradient = (colors: string[]): string => {
-  const positions = [
-    'circle farthest-side at 0% 100%',
-    'circle farthest-side at 100% 0%',
-    'circle farthest-side at 100% 100%',
-    'circle farthest-side at 0% 0%'
-  ];
-
-  return colors
-    .map((color, index) => `radial-gradient(${positions[index % positions.length]}, ${color}, transparent)`)
-    .join(', ');
-};
-
-export const BackgroundGradient = ({
+export const BackgroundGradient: AceternityComponent<{ animate?: boolean; colors?: string[] }> = ({
   children,
   className,
   containerClassName,
   animate = true,
   colors = ['#00ccb1', '#7b61ff', '#ffc414', '#1ca0fb']
-}: BackgroundGradientProps) => {
-  const backgroundImage = generateGradient(colors);
+}) => {
+  const backgroundImage = useMemo(() => {
+    const positions = [
+      'circle farthest-side at 0% 100%',
+      'circle farthest-side at 100% 0%',
+      'circle farthest-side at 100% 100%',
+      'circle farthest-side at 0% 0%'
+    ];
+
+    return colors
+      .map((color, index) => `radial-gradient(${positions[index % positions.length]}, ${color}, transparent)`)
+      .join(', ');
+  }, [colors]);
 
   const variants = {
     initial: { backgroundPosition: '0 50%' },
@@ -37,9 +35,10 @@ export const BackgroundGradient = ({
         initial={animate ? 'initial' : undefined}
         animate={animate ? 'animate' : undefined}
         transition={animate ? { duration: 5, repeat: Infinity, repeatType: 'reverse' } : undefined}
-        style={{ backgroundSize: animate ? '400% 400%' : undefined, backgroundImage }}
+        style={{ backgroundImage }}
         className={cn(
-          'absolute inset-0 z-[1] rounded-3xl opacity-60 blur-xl transition duration-500 will-change-transform group-hover:opacity-100'
+          'absolute inset-0 z-[1] rounded-3xl opacity-60 blur-xl transition duration-500 will-change-transform group-hover:opacity-100',
+          { 'bg-[length:400%_400%]': animate }
         )}
       />
       <motion.div
@@ -47,8 +46,8 @@ export const BackgroundGradient = ({
         initial={animate ? 'initial' : undefined}
         animate={animate ? 'animate' : undefined}
         transition={animate ? { duration: 5, repeat: Infinity, repeatType: 'reverse' } : undefined}
-        style={{ backgroundSize: animate ? '400% 400%' : undefined, backgroundImage }}
-        className={cn('absolute inset-0 z-[1] rounded-3xl will-change-transform')}
+        style={{ backgroundImage }}
+        className={cn('absolute inset-0 z-[1] rounded-3xl will-change-transform', { 'bg-[length:400%_400%]': animate })}
       />
 
       <div className={cn('relative z-10', className)}>{children}</div>

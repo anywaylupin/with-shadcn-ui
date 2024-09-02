@@ -6,15 +6,13 @@ import { useCallback, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { generateRandomString } from '@/lib/utils/string';
 
-export const EvervaultCard = ({ text, className }: PropsWithClass<{ text?: string }>) => {
+export const EvervaultCard: AceternityComponent<{ text?: string }> = ({ text, className }) => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
   const [randomString, setRandomString] = useState('');
 
-  useEffect(() => {
-    setRandomString(generateRandomString(1500));
-  }, []);
+  useEffect(() => setRandomString(generateRandomString(1500)), []);
 
   const onMouseMove = useCallback(
     ({ currentTarget, clientX, clientY }: any) => {

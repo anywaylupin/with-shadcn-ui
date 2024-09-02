@@ -4,8 +4,7 @@ import { AnimatePresence, motion, useMotionValue } from 'framer-motion';
 import { cn, getRandomElement } from '@/lib/utils';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-type FollowerPointerProps = PropsWithClass<{ title: StringNode; colors?: string[] }>;
-export const FollowerPointerCard = ({
+export const FollowerPointerCard: AceternityComponent<{ title: StringNode; colors?: string[] }> = ({
   children,
   className,
   title,
@@ -18,24 +17,22 @@ export const FollowerPointerCard = ({
     'var(--red-500)',
     'var(--yellow-500)'
   ]
-}: FollowerPointerProps) => {
+}) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const ref = useRef<HTMLDivElement>(null);
   const [rect, setRect] = useState<DOMRect | null>(null);
   const [isInside, setIsInside] = useState<boolean>(false);
   useEffect(() => {
-    if (ref.current) {
-      setRect(ref.current.getBoundingClientRect());
-    }
+    if (!ref.current) return;
+    setRect(ref.current.getBoundingClientRect());
   }, []);
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
-      if (rect) {
-        x.set(e.clientX - rect.left + window.scrollX);
-        y.set(e.clientY - rect.top + window.scrollY);
-      }
+      if (!rect) return;
+      x.set(e.clientX - rect.left + window.scrollX);
+      y.set(e.clientY - rect.top + window.scrollY);
     },
     [rect, x, y]
   );

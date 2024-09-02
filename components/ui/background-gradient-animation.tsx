@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-type BackgroundGradientAnimationProps = PropsWithClass<{
+type BackgroundGradientAnimationProps = {
   start?: string;
   end?: string;
   first?: string;
@@ -16,9 +16,9 @@ type BackgroundGradientAnimationProps = PropsWithClass<{
   size?: string;
   blendingValue?: string;
   interactive?: boolean;
-}>;
+};
 
-export const BackgroundGradientAnimation = ({
+export const BackgroundGradientAnimation: AceternityComponent<BackgroundGradientAnimationProps> = ({
   start = 'rgb(108, 0, 162)',
   end = 'rgb(0, 17, 82)',
   first = '18, 113, 255',
@@ -31,9 +31,9 @@ export const BackgroundGradientAnimation = ({
   blendingValue = 'hard-light',
   children,
   className,
-  interactive = true,
-  containerClassName
-}: BackgroundGradientAnimationProps) => {
+  containerClassName,
+  interactive = false
+}) => {
   const interactiveRef = useRef<HTMLDivElement>(null);
 
   const [curX, setCurX] = useState(0);
@@ -55,20 +55,18 @@ export const BackgroundGradientAnimation = ({
   }, [blendingValue, end, fifth, first, fourth, pointerColor, second, size, start, third]);
 
   useEffect(() => {
-    if (!interactiveRef.current) {
-      return;
-    }
-    setCurX(curX + (tgX - curX) / 20);
-    setCurY(curY + (tgY - curY) / 20);
+    if (!interactiveRef.current) return;
+    setCurX((curX) => curX + (tgX - curX) / 20);
+    setCurY((curY) => curY + (tgY - curY) / 20);
     interactiveRef.current.style.transform = `translate(${Math.round(curX)}px, ${Math.round(curY)}px)`;
-  }, [curX, curY, tgX, tgY]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [tgX, tgY]);
 
   const handleMouseMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    if (interactiveRef.current) {
-      const rect = interactiveRef.current.getBoundingClientRect();
-      setTgX(event.clientX - rect.left);
-      setTgY(event.clientY - rect.top);
-    }
+    if (!interactiveRef.current) return;
+    const rect = interactiveRef.current.getBoundingClientRect();
+    setTgX(event.clientX - rect.left);
+    setTgY(event.clientY - rect.top);
   };
 
   const [isSafari, setIsSafari] = useState(false);
@@ -147,6 +145,7 @@ export const BackgroundGradientAnimation = ({
 
         {interactive && (
           <div
+            aria-hidden
             ref={interactiveRef}
             onMouseMove={handleMouseMove}
             className={cn(

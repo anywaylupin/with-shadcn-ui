@@ -5,14 +5,7 @@ import { memo, useState } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
-export type FocusCardProps = {
-  card: any;
-  index: number;
-  hovered: number | null;
-  setHovered: React.Dispatch<React.SetStateAction<number | null>>;
-};
-
-export const FocusCard = memo(function FocusCard({ card, index, hovered, setHovered }: FocusCardProps) {
+export const FocusCard = memo<FocusCardProps>(function FocusCard({ card, index, hovered, setHovered }) {
   return (
     <div
       onMouseEnter={() => setHovered(index)}
@@ -37,7 +30,7 @@ export const FocusCard = memo(function FocusCard({ card, index, hovered, setHove
   );
 });
 
-export const FocusCardContainer = ({ items }: { items: { title: string; src: string }[] }) => {
+export const FocusCardContainer: AceternityComponent<{ items: FocusCardItem[] }> = ({ items }) => {
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
@@ -48,3 +41,12 @@ export const FocusCardContainer = ({ items }: { items: { title: string; src: str
     </div>
   );
 };
+
+export type FocusCardProps = {
+  card: any;
+  index: number;
+  hovered: number | null;
+  setHovered: React.Dispatch<React.SetStateAction<number | null>>;
+};
+
+export type FocusCardItem = { id: React.Key; title: string; src: string };

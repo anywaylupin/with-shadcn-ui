@@ -1,33 +1,29 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { createContext, useContext, useState } from 'react';
-import { useEffect, useRef } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 import { useOutsideClick } from '@/hooks';
 
-export const AnimatedModalContext = createContext<StateContextType>([false, () => {}]);
-
-export const AnimatedModalProvider = ({ children }: PropsWithClass) => {
-  const [open, setOpen] = useState(false);
-
-  return <AnimatedModalContext.Provider value={[open, setOpen]}>{children}</AnimatedModalContext.Provider>;
-};
+export const ModalContext = createContext<StateContextType>([false, () => {}]);
 
 export const useModal = () => {
-  const context = useContext(AnimatedModalContext);
+  const context = useContext(ModalContext);
   if (!context) {
     throw new Error('useModal must be used within a ModalProvider');
   }
   return context;
 };
 
-export const AnimatedModal = ({ children }: PropsWithClass) => (
-  <AnimatedModalProvider>{children}</AnimatedModalProvider>
-);
+export const Modal: AceternityComponent = ({ children }) => {
+  const [open, setOpen] = useState(false);
+  const providerValue = useMemo<StateContextType>(() => [open, setOpen], [open]);
 
-export const AnimatedModalTrigger = ({ children, className }: PropsWithClass) => {
+  return <ModalContext.Provider value={providerValue}>{children}</ModalContext.Provider>;
+};
+
+export const ModalTrigger: AceternityComponent = ({ children, className }) => {
   const [_, setOpen] = useModal();
 
   return (
@@ -40,19 +36,15 @@ export const AnimatedModalTrigger = ({ children, className }: PropsWithClass) =>
   );
 };
 
-export const AnimatedModalBody = ({ children, className }: PropsWithClass) => {
+export const ModalBody: AceternityComponent = ({ children, className }) => {
   const [open, setOpen] = useModal();
 
   useEffect(() => {
-    if (open) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
-    }
+    document.body.style.overflow = open ? 'hidden' : 'auto';
   }, [open]);
 
-  const modalRef = useRef(null);
-  useOutsideClick(modalRef, () => setOpen(false));
+  const ref = useRef(null);
+  useOutsideClick(ref, () => setOpen(false));
 
   return (
     <AnimatePresence>
@@ -61,12 +53,12 @@ export const AnimatedModalBody = ({ children, className }: PropsWithClass) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1, backdropFilter: 'blur(10px)' }}
           exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-          className="fixed inset-0 z-50 flex h-full w-full items-center justify-center [perspective:800px] [transform-style:preserve-3d]"
+          className="transform-3d fixed inset-0 z-50 flex h-full w-full items-center justify-center [perspective:800px]"
         >
           <Overlay />
 
           <motion.div
-            ref={modalRef}
+            ref={ref}
             className={cn(
               'relative z-50 flex max-h-[90%] min-h-[50%] flex-1 flex-col overflow-hidden border border-transparent bg-white dark:border-neutral-800 dark:bg-neutral-950 md:max-w-[40%] md:rounded-2xl',
               className
@@ -85,15 +77,15 @@ export const AnimatedModalBody = ({ children, className }: PropsWithClass) => {
   );
 };
 
-export const AnimatedModalContent = ({ children, className }: PropsWithClass) => (
+export const ModalContent: AceternityComponent = ({ children, className }) => (
   <div className={cn('flex flex-1 flex-col p-8 md:p-10', className)}>{children}</div>
 );
 
-export const AnimatedModalFooter = ({ children, className }: PropsWithClass) => (
+export const ModalFooter: AceternityComponent = ({ children, className }) => (
   <div className={cn('flex justify-end bg-gray-100 p-4 dark:bg-neutral-900', className)}>{children}</div>
 );
 
-const Overlay = ({ className }: PropsWithClass) => (
+const Overlay: AceternityComponent = ({ className }) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1, backdropFilter: 'blur(10px)' }}
@@ -102,7 +94,7 @@ const Overlay = ({ className }: PropsWithClass) => (
   ></motion.div>
 );
 
-const CloseIcon = () => {
+const CloseIcon: AceternityComponent = () => {
   const [_, setOpen] = useModal();
 
   return (

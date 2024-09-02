@@ -6,9 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
-export type HeroParallaxItem = { title: string; link: string; thumbnail: string };
-
-export const HeroParallax = ({ items }: { items: HeroParallaxItem[] }) => {
+export const HeroParallax: AceternityComponent<{ items: HeroParallaxItem[] }> = ({ items }) => {
   const firstRow = items.slice(0, 5);
   const secondRow = items.slice(5, 10);
   const thirdRow = items.slice(10, 15);
@@ -27,23 +25,23 @@ export const HeroParallax = ({ items }: { items: HeroParallaxItem[] }) => {
   return (
     <div
       ref={ref}
-      className="relative flex h-[300vh] flex-col self-auto overflow-hidden py-40 antialiased [perspective:1000px] [transform-style:preserve-3d]"
+      className="transform-3d relative flex h-[300vh] flex-col self-auto overflow-hidden py-40 antialiased [perspective:1000px]"
     >
       <Header />
       <motion.div style={{ rotateX, rotateZ, translateY, opacity }}>
         <motion.div className="mb-20 flex flex-row-reverse space-x-20 space-x-reverse">
           {firstRow.map((item) => (
-            <ProductCard item={item} translate={translateX} key={item.title} />
+            <ProductCard key={item.id} item={item} translate={translateX} />
           ))}
         </motion.div>
         <motion.div className="mb-20 flex flex-row space-x-20">
           {secondRow.map((item) => (
-            <ProductCard item={item} translate={translateXReverse} key={item.title} />
+            <ProductCard key={item.id} item={item} translate={translateXReverse} />
           ))}
         </motion.div>
         <motion.div className="flex flex-row-reverse space-x-20 space-x-reverse">
           {thirdRow.map((item) => (
-            <ProductCard item={item} translate={translateX} key={item.title} />
+            <ProductCard key={item.id} item={item} translate={translateX} />
           ))}
         </motion.div>
       </motion.div>
@@ -51,7 +49,7 @@ export const HeroParallax = ({ items }: { items: HeroParallaxItem[] }) => {
   );
 };
 
-export const Header = () => (
+export const Header: AceternityComponent = () => (
   <div className="relative left-0 top-0 mx-auto w-full max-w-7xl px-4 py-20 md:py-40">
     <h1 className="text-2xl font-bold dark:text-white md:text-7xl">
       The Ultimate <br /> development studio
@@ -63,7 +61,10 @@ export const Header = () => (
   </div>
 );
 
-export const ProductCard = ({ item, translate }: { item: HeroParallaxItem; translate: MotionValue<number> }) => (
+export const ProductCard: AceternityComponent<{
+  item: HeroParallaxItem;
+  translate: MotionValue<number>;
+}> = ({ item, translate }) => (
   <motion.div
     style={{ x: translate }}
     whileHover={{ y: -20 }}
@@ -83,3 +84,5 @@ export const ProductCard = ({ item, translate }: { item: HeroParallaxItem; trans
     <h2 className="absolute bottom-4 left-4 text-white opacity-0 group-hover/product:opacity-100">{item.title}</h2>
   </motion.div>
 );
+
+export type HeroParallaxItem = { id: React.Key; title: string; link: string; thumbnail: string };

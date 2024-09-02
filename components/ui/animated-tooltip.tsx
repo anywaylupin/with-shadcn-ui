@@ -5,31 +5,28 @@ import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from
 import Image from 'next/image';
 import { useState } from 'react';
 
-export type AnimatedTooltipProps = PropsWithClass<{
-  items: { id: number; name: string; designation: string; image: string }[];
-}>;
-
-export const AnimatedTooltip = ({ items }: AnimatedTooltipProps) => {
+export const AnimatedTooltip: AceternityComponent<AnimatedTooltipProps> = ({ items, stiffness = 100, damping = 5 }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-  const springConfig = { stiffness: 100, damping: 5 };
+
   const x = useMotionValue(0);
-  const rotate = useSpring(useTransform(x, [-100, 100], [-45, 45]), springConfig);
-  const translateX = useSpring(useTransform(x, [-100, 100], [-50, 50]), springConfig);
-  const handleMouseMove = (event: React.MouseEvent<HTMLImageElement>) =>
-    x.set(event.nativeEvent.offsetX - (event.target as HTMLImageElement).offsetWidth / 2);
+  const rotate = useSpring(useTransform(x, [-100, 100], [-45, 45]), { stiffness, damping });
+  const translateX = useSpring(useTransform(x, [-100, 100], [-50, 50]), { stiffness, damping });
 
   return (
     <>
-      {items.map((item) => (
+      {items.map((item, index) => (
         <div
+          aria-hidden
           className="group relative -mr-4"
-          key={item.name}
-          onMouseEnter={() => setHoveredIndex(item.id)}
+          key={item.id}
+          onMouseEnter={() => setHoveredIndex(index)}
           onMouseLeave={() => setHoveredIndex(null)}
         >
           <AnimatePresence mode="popLayout">
-            {hoveredIndex === item.id && (
+            {hoveredIndex === index && (
               <motion.div
+                role="tooltip"
+                aria-live="polite"
                 initial={{ opacity: 0, y: 20, scale: 0.6 }}
                 animate={{
                   opacity: 1,
@@ -50,7 +47,9 @@ export const AnimatedTooltip = ({ items }: AnimatedTooltipProps) => {
           </AnimatePresence>
 
           <Image
-            onMouseMove={handleMouseMove}
+            onMouseMove={(event) =>
+              x.set(event.nativeEvent.offsetX - (event.target as HTMLImageElement).offsetWidth / 2)
+            }
             height={100}
             width={100}
             src={item.image}
@@ -62,3 +61,7 @@ export const AnimatedTooltip = ({ items }: AnimatedTooltipProps) => {
     </>
   );
 };
+
+export type AnimatedTooltipItem = { id: React.Key; name: string; designation: string; image: string };
+
+export type AnimatedTooltipProps = { items: AnimatedTooltipItem[]; stiffness?: number; damping?: number };

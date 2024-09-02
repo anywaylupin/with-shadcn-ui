@@ -8,18 +8,7 @@ import { useCallback, useEffect, useId, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { loadSlim } from '@tsparticles/slim';
 
-type SparklesCoreProps = PropsWithClass<{
-  id?: string;
-  background?: string;
-  particleSize?: number;
-  minSize?: number;
-  maxSize?: number;
-  speed?: number;
-  particleColor?: string;
-  particleDensity?: number;
-}>;
-
-export const SparklesCore = ({
+export const SparklesCore: AceternityComponent<SparklesCoreProps> = ({
   id,
   className,
   background,
@@ -28,7 +17,7 @@ export const SparklesCore = ({
   speed,
   particleColor,
   particleDensity
-}: SparklesCoreProps) => {
+}) => {
   const [init, setInit] = useState(false);
 
   useEffect(() => {
@@ -40,9 +29,7 @@ export const SparklesCore = ({
   const controls = useAnimation();
 
   const particlesLoaded = useCallback(
-    async (container?: Container) => {
-      container && controls.start({ opacity: 1, transition: { duration: 1 } });
-    },
+    async (container?: Container) => container && controls.start({ opacity: 1, transition: { duration: 1 } }),
     [controls]
   );
 
@@ -215,4 +202,15 @@ export const SparklesCore = ({
       )}
     </motion.div>
   );
+};
+
+type SparklesCoreProps = {
+  id?: string;
+  background?: string;
+  particleSize?: number;
+  minSize?: number;
+  maxSize?: number;
+  speed?: number;
+  particleColor?: string;
+  particleDensity?: number;
 };

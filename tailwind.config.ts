@@ -1,9 +1,10 @@
 import type { Config } from 'tailwindcss';
 import TailwindCssAnimate from 'tailwindcss-animate';
-import { AddVariablesForColors, GridAndDotsBackground } from './plugins/tailwindcss';
+import { AddVariablesForColors, AuroraBackground, GridAndDotsBackground } from './plugins/tailwindcss';
+import plugin from 'tailwindcss/plugin';
 
 const config = {
-  darkMode: ['class'],
+  darkMode: ['selector'],
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -19,6 +20,10 @@ const config = {
       }
     },
     extend: {
+      boxShadow: {
+        'beam-collision':
+          '0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset'
+      },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
@@ -64,7 +69,37 @@ const config = {
       }
     }
   },
-  plugins: [AddVariablesForColors, GridAndDotsBackground, TailwindCssAnimate]
+  plugins: [
+    plugin(({ addComponents, addUtilities }) => {
+      addComponents({
+        '.aceternity-3d-pin': {
+          marginLeft: '0.09375rem',
+          perspective: '1000px',
+          transform: 'rotateX(70deg) translateZ(0deg)'
+        },
+        '.aceternity-container-scroll': {
+          backgroundColor: '#222222',
+          border: '4px #6C6C6C',
+          borderRadius: '30px',
+          boxShadow:
+            '0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003'
+        }
+      });
+
+      addUtilities({
+        '.transform-3d': {
+          transformStyle: 'preserve-3d'
+        },
+        '.scrollbar-none': {
+          scrollbarWidth: 'none'
+        }
+      });
+    }),
+    AddVariablesForColors,
+    AuroraBackground,
+    GridAndDotsBackground,
+    TailwindCssAnimate
+  ]
 } satisfies Config;
 
 export default config;

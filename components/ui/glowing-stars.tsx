@@ -5,16 +5,14 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-export const GlowingStarsBackgroundCard = ({
+export const GlowingStarsBackgroundCard: AceternityComponent<{ rows?: number; cols?: number }> = ({
   className,
   children,
   rows = 6,
   cols = 18
-}: PropsWithClass<{ rows?: number; cols?: number }>) => {
+}) => {
   const [mouseEnter, setMouseEnter] = useState(false);
-
   const [glowingStars, setGlowingStars] = useState<number[]>([]);
-
   const highlightedStars = useRef<number[]>([]);
 
   useEffect(() => {
@@ -36,21 +34,14 @@ export const GlowingStarsBackgroundCard = ({
       )}
     >
       <div className="flex items-center justify-center">
-        <div
-          className="h-48 w-full p-1"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: `repeat(${cols}, 1fr)`,
-            gap: `1px`
-          }}
-        >
-          {[...Array(rows * cols)].map((_, starIdx) => {
-            const isGlowing = glowingStars.includes(starIdx);
-            const delay = (starIdx % 10) * 0.1;
-            const staticDelay = starIdx * 0.01;
+        <div className="grid h-48 w-full gap-[1px] p-1" style={{ gridTemplateColumns: `repeat(${cols}, 1fr)` }}>
+          {[...Array(rows * cols)].map((_, idx) => {
+            const isGlowing = glowingStars.includes(idx);
+            const delay = (idx % 10) * 0.1;
+            const staticDelay = idx * 0.01;
 
             return (
-              <div key={`matrix-col-${starIdx}}`} className="relative flex items-center justify-center">
+              <div key={`matrix-col-${idx}}`} className="relative flex items-center justify-center">
                 <Star isGlowing={mouseEnter ? true : isGlowing} delay={mouseEnter ? staticDelay : delay} />
                 {mouseEnter && <Glow delay={staticDelay} />}
                 <AnimatePresence mode="wait">{isGlowing && <Glow delay={delay} />}</AnimatePresence>
@@ -64,15 +55,15 @@ export const GlowingStarsBackgroundCard = ({
   );
 };
 
-export const GlowingStarsDescription = ({ className, children }: PropsWithClass) => (
+export const GlowingStarsDescription: AceternityComponent = ({ className, children }) => (
   <p className={cn('max-w-[16rem] text-base text-white', className)}>{children}</p>
 );
 
-export const GlowingStarsTitle = ({ className, children }: { className?: string; children?: React.ReactNode }) => (
+export const GlowingStarsTitle: AceternityComponent = ({ className, children }) => (
   <h2 className={cn('text-2xl font-bold text-[#eaeaea]', className)}>{children}</h2>
 );
 
-const Star = ({ isGlowing, delay }: { isGlowing: boolean; delay: number }) => (
+const Star: AceternityComponent<{ isGlowing: boolean; delay: number }> = ({ isGlowing, delay }) => (
   <motion.div
     key={delay}
     initial={{ scale: 1 }}
@@ -82,7 +73,7 @@ const Star = ({ isGlowing, delay }: { isGlowing: boolean; delay: number }) => (
   ></motion.div>
 );
 
-const Glow = ({ delay }: { delay: number }) => (
+const Glow: AceternityComponent<{ delay: number }> = ({ delay }) => (
   <motion.div
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}

@@ -4,50 +4,41 @@ import { useEffect, useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
-type InfiniteMovingCardsProps = PropsWithClass<{
-  items: { quote: string; name: string; title: string }[];
-  direction?: 'forwards' | 'reverse';
-  speed?: 'fast' | 'normal' | 'slow' | number;
-  pauseOnHover?: boolean;
-}>;
-
-export const InfiniteMovingCards = ({
+export const InfiniteMovingCards: AceternityComponent<InfiniteMovingCardsProps> = ({
   items,
   direction = 'forwards',
   speed = 'fast',
   pauseOnHover = true,
   className
-}: InfiniteMovingCardsProps) => {
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollerRef = useRef<HTMLUListElement>(null);
 
   const [start, setStart] = useState(false);
 
   useEffect(() => {
-    if (containerRef.current && scrollerRef.current) {
-      const scrollerContent = Array.from(scrollerRef.current.children);
+    if (!containerRef.current || !scrollerRef.current) return;
+    const scrollerContent = Array.from(scrollerRef.current.children);
+    scrollerContent.forEach((item) => scrollerRef.current?.appendChild(item.cloneNode(true)));
 
-      scrollerContent.forEach((item) => scrollerRef.current?.appendChild(item.cloneNode(true)));
+    containerRef.current.style.setProperty('--animation-direction', direction);
 
-      containerRef.current.style.setProperty('--animation-direction', direction);
-
-      switch (speed) {
-        case 'fast':
-          containerRef.current.style.setProperty('--animation-duration', '20s');
-          break;
-        case 'normal':
-          containerRef.current.style.setProperty('--animation-duration', '40s');
-          break;
-        case 'slow':
-          containerRef.current.style.setProperty('--animation-duration', '80s');
-          break;
-        default:
-          containerRef.current.style.setProperty('--animation-duration', `${speed}s`);
-          break;
-      }
-
-      setStart(true);
+    switch (speed) {
+      case 'fast':
+        containerRef.current.style.setProperty('--animation-duration', '20s');
+        break;
+      case 'normal':
+        containerRef.current.style.setProperty('--animation-duration', '40s');
+        break;
+      case 'slow':
+        containerRef.current.style.setProperty('--animation-duration', '80s');
+        break;
+      default:
+        containerRef.current.style.setProperty('--animation-duration', `${speed}s`);
+        break;
     }
+
+    setStart(true);
   }, [direction, speed]);
 
   return (
@@ -67,9 +58,9 @@ export const InfiniteMovingCards = ({
       >
         {items.map((item, idx) => (
           <li
-            key={`${item.name}-${idx}`}
+            key={item.id}
             className="relative w-[350px] max-w-full flex-shrink-0 rounded-2xl border border-b-0 border-slate-700 px-8 py-6 md:w-[450px]"
-            style={{ background: 'linear-gradient(180deg, var(--slate-800), var(--slate-900)' }}
+            style={{ background: 'linear-gradient(180deg,var(--slate-800),var(--slate-900)' }}
           >
             <blockquote>
               <div
@@ -89,4 +80,13 @@ export const InfiniteMovingCards = ({
       </ul>
     </div>
   );
+};
+
+type InfiniteMovingCardsItem = { id: React.Key; quote: string; name: string; title: string };
+
+type InfiniteMovingCardsProps = {
+  items: InfiniteMovingCardsItem[];
+  direction?: 'forwards' | 'reverse';
+  speed?: 'fast' | 'normal' | 'slow' | number;
+  pauseOnHover?: boolean;
 };

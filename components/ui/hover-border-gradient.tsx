@@ -5,17 +5,10 @@ import { useCallback, useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 
-export const HoverBorderGradient = ({
-  children,
-  containerClassName,
-  className,
-  as: Tag = 'button',
-  duration = 1,
-  clockwise = true,
-  ...props
-}: PropsWithClass<
-  { as?: React.ElementType; duration?: number; clockwise?: boolean } & React.HTMLAttributes<HTMLElement>
->) => {
+export const HoverBorderGradient: AceternityComponent<
+  { as?: React.ElementType; duration?: number; clockwise?: boolean },
+  HTMLDivElement
+> = ({ children, containerClassName, className, as: Tag = 'button', duration = 1, clockwise = true, ...props }) => {
   const [hovered, setHovered] = useState(false);
   const [direction, setDirection] = useState<DirectionSide>('top');
 
@@ -42,10 +35,7 @@ export const HoverBorderGradient = ({
 
   useEffect(() => {
     if (!hovered) {
-      const interval = setInterval(() => {
-        setDirection((prevState) => rotateDirection(prevState));
-      }, duration * 1000);
-
+      const interval = setInterval(() => setDirection((prevState) => rotateDirection(prevState)), duration * 1000);
       return () => clearInterval(interval);
     }
   }, [duration, hovered, rotateDirection]);

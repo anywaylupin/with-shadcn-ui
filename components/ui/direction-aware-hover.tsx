@@ -6,19 +6,11 @@ import { useCallback, useRef, useState } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
-export type DirectionAwareHoverProps = PropsWithClass<{
+export const DirectionAwareHover: AceternityComponent<{
   src: string;
   childrenClassName?: string;
   imageClassName?: string;
-}>;
-
-export const DirectionAwareHover = ({
-  src,
-  children,
-  childrenClassName,
-  imageClassName,
-  className
-}: DirectionAwareHoverProps) => {
+}> = ({ src, children, childrenClassName, imageClassName, className }) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const variants = {
@@ -91,10 +83,7 @@ export const DirectionAwareHover = ({
           <motion.div
             variants={variants}
             className="relative h-full w-full bg-gray-50 dark:bg-black"
-            transition={{
-              duration: 0.2,
-              ease: 'easeOut'
-            }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
           >
             <Image
               alt="image"
@@ -106,10 +95,7 @@ export const DirectionAwareHover = ({
           </motion.div>
           <motion.div
             variants={textVariants}
-            transition={{
-              duration: 0.5,
-              ease: 'easeOut'
-            }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
             className={cn('absolute bottom-4 left-4 z-40 text-white', childrenClassName)}
           >
             {children}
