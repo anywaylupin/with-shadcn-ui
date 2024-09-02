@@ -15,7 +15,13 @@ export const FocusCard = memo<FocusCardProps>(function FocusCard({ card, index, 
         hovered !== null && hovered !== index && 'scale-[0.98] blur-sm'
       )}
     >
-      <Image src={card.src} alt={card.title} fill className="absolute inset-0 object-cover" />
+      <Image
+        src={card.src}
+        alt={card.title}
+        className="absolute inset-0 object-cover"
+        fill
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+      />
       <div
         className={cn(
           'absolute inset-0 flex items-end bg-black/50 px-4 py-8 transition-opacity duration-300',

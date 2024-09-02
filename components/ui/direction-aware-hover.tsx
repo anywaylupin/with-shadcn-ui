@@ -90,6 +90,7 @@ export const DirectionAwareHover: AceternityComponent<{
               className={cn('h-full w-full scale-[1.15] object-cover', imageClassName)}
               width="1000"
               height="1000"
+              priority
               src={src}
             />
           </motion.div>

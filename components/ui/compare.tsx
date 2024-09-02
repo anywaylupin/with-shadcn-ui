@@ -175,14 +175,16 @@ export const Compare: AceternityComponent<CompareProps> = ({
               transition={{ duration: 0 }}
             >
               <Image
-                alt="first image"
-                layout="fill"
-                src={first.image}
                 className={cn(
                   'absolute inset-0 z-20 h-full w-full flex-shrink-0 select-none rounded-2xl',
                   first?.className
                 )}
+                src={first.image}
+                alt="first image"
                 draggable={false}
+                priority
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               />
             </motion.div>
           )}

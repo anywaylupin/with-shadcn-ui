@@ -192,13 +192,19 @@ export const Card = ({ card, index, layout = false }: { card: CardType; index: n
             {card.title}
           </motion.p>
         </div>
-        <BlurImage src={card.src} alt={card.title} fill className="absolute inset-0 z-10 object-cover" />
+        <BlurImage
+          src={card.src}
+          alt={card.title}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          className="absolute inset-0 z-10 object-cover"
+        />
       </motion.button>
     </>
   );
 };
 
-export const BlurImage = ({ height, width, src, className, alt, ...rest }: ImageProps) => {
+export const BlurImage = ({ src, className, alt, ...rest }: ImageProps) => {
   const [loading, setLoading] = useState(true);
 
   return (
@@ -206,12 +212,10 @@ export const BlurImage = ({ height, width, src, className, alt, ...rest }: Image
       className={cn('transition duration-300', loading ? 'blur-sm' : 'blur-0', className)}
       onLoad={() => setLoading(false)}
       src={src}
-      width={width}
-      height={height}
-      loading="lazy"
       decoding="async"
       blurDataURL={typeof src === 'string' ? src : undefined}
       alt={alt}
+      priority
       {...rest}
     />
   );
