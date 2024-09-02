@@ -26,16 +26,17 @@ const config = {
           '0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset'
       },
       animation: {
-        'accordion-down': 'accordion-down 0.2s ease-out',
-        'accordion-up': 'accordion-up 0.2s ease-out',
-        aurora: 'aurora 60s linear infinite',
-        'meteor-effect': 'meteor 5s linear infinite',
         first: 'moveVertical 30s ease infinite',
         second: 'moveInCircle 20s reverse infinite',
         third: 'moveInCircle 40s linear infinite',
         fourth: 'moveHorizontal 40s ease infinite',
         fifth: 'moveInCircle 20s ease infinite',
-        scroll: 'scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite'
+        'accordion-down': 'accordion-down 0.2s ease-out',
+        'accordion-up': 'accordion-up 0.2s ease-out',
+        aurora: 'aurora 60s linear infinite',
+        'meteor-effect': 'meteor 5s linear infinite',
+        scroll: 'scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite',
+        spotlight: 'spotlight 2s ease .75s 1 forwards'
       },
       keyframes: {
         'accordion-down': {
@@ -75,6 +76,10 @@ const config = {
         },
         scroll: {
           to: { transform: 'translate(calc(-50% - 0.5rem))' }
+        },
+        spotlight: {
+          '0%': { opacity: '0', transform: 'translate(-72%, -62%) scale(0.5)' },
+          '100%': { opacity: '1', transform: 'translate(-50%,-40%) scale(1)' }
         }
       }
     }
