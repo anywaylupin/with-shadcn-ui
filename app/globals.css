@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+img {
+  object-fit: contain;
+  width: auto;
+  height: auto;
+}
