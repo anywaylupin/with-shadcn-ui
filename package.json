@@ -8,14 +8,14 @@
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
-    "format": "prettier --write",
+    "format": "prettier --write */**/*.{js,jsx,json,ts,tsx,scss,css,md}",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
-      "prettier --write",
-      "eslint --fix",
-      "eslint"
+      "prettier --write */**/*.{js,jsx,json,ts,tsx,scss,css,md}",
+      "next lint --fix",
+      "next lint"
     ]
   },
   "overrides": {
