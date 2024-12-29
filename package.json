@@ -11,6 +11,16 @@
     "format": "prettier --write */**/*.{js,jsx,json,ts,tsx,scss,css,md}",
     "prepare": "husky"
   },
+  "lint-staged": {
+    "*/**/*.{js,jsx,ts,tsx}": [
+      "prettier --write",
+      "eslint --fix",
+      "eslint"
+    ],
+    "*/**/*.{json,css,md}": [
+      "prettier --write"
+    ]
+  },
   "overrides": {
     "framer-motion": {
       "react": "19.0.0-rc-66855b96-20241106",
