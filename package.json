@@ -9,11 +9,11 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
-      "next lint --fix",
+      "eslint --fix",
       "prettier --write"
     ]
   },
