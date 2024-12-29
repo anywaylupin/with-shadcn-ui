@@ -12,11 +12,8 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "*.{js,ts,jsx,tsx}": [
-      "prettier --write */**/*.{js,jsx,json,ts,tsx,scss,css,md}",
-      "next lint --fix",
-      "next lint"
-    ]
+    "*/**/*.{js,jsx,ts,tsx}": ["prettier --write", "eslint --fix", "eslint"],
+    "*/**/*.{json,css,md}": ["prettier --write"]
   },
   "overrides": {
     "framer-motion": {
