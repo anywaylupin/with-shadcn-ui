@@ -9,12 +9,13 @@
     "lint": "next lint",
     "lint:fix": "next lint --fix",
     "format": "prettier --write",
-    "prepare": "husky && husky install"
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
+      "prettier --write",
       "eslint --fix",
-      "prettier --write"
+      "eslint"
     ]
   },
   "overrides": {
